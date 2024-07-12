@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../config"
 import { Spinner } from "../components/Spinner"
 import { Error } from "../components/Error"
+import { indexOf } from "lodash"
 
 export interface Blog {
   "content": string;
@@ -32,7 +33,6 @@ export const Blogs = () => {
       }).then((res) => {
         if (res.data.success) {
           setBlogs(res.data.publishedBlogs);
-          console.log(res.data.publishedBlogs);
           setLoading(false);
         } else {
           setErrorMessage(res.data.message);
@@ -67,7 +67,7 @@ export const Blogs = () => {
           <Appbar />
         </div>
         <div className="flex justify-center flex-col place-items-center">
-          {blogs && blogs[0] ? blogs?.map((blog) => <BlogCard id={blog.id} title={blog.title} content={blog.content} authorName={blog.author.username} createdAt={blog.createdAt} />) : <div>No blogs found </div>}
+          {blogs && blogs[0] ? blogs?.map((blog) => <BlogCard key={indexOf(blogs, blog)} id={blog.id} title={blog.title} content={blog.content} authorName={blog.author.username} createdAt={blog.createdAt} />) : <div>No blogs found </div>}
         </div>
       </div >
   )

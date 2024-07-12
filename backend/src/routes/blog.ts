@@ -1,8 +1,8 @@
+import { createBlogInputSchema, updateBlogInputSchema } from "@frumptious_clone/common";
 import { PrismaClient } from "@prisma/client/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { Bindings, Variables } from "..";
-import { withAccelerate } from "@prisma/extension-accelerate";
-import { createBlogInputSchema, updateBlogInputSchema } from "@frumptious_clone/common";
 
 const blog = new Hono<{
   Bindings: Bindings,
