@@ -1,1 +1,1 @@
-An AI-powered blog application. (under construction)
+An AI-powered blog application (under construction)
