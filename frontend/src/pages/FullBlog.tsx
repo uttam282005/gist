@@ -12,7 +12,7 @@ export const FullBlog = () => {
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const serializedContent = useSerialize(content);
@@ -26,9 +26,9 @@ export const FullBlog = () => {
           }
         });
         if (!res.data.success) {
-          setLoading(false)
           setError(true);
           setErrorMessage(res.data.message);
+          setLoading(false);
         } else {
           setTitle(res.data.blog.title);
           setContent(res.data.blog.content);
@@ -41,7 +41,7 @@ export const FullBlog = () => {
       }
     }
     getBlog();
-  }, []);
+  }, [id]);
 
   return loading ?
     <div className="flex justify-center items-center h-screen">
