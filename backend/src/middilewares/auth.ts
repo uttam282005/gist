@@ -28,9 +28,6 @@ export const authenticateUser = createMiddleware(async (c, next) => {
     return await next();
   } catch (error) {
     console.error(error);
-    return c.json({
-      message: "not signed in",
-      success: false,
-    })
+    return c.status(403);
   }
 })

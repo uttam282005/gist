@@ -1,69 +1,74 @@
 import { Hono } from "hono";
-import { PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from "@prisma/client/edge";
 import { sign } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Bindings, Variables } from "..";
-import { userSignInInputSchema, userSignUpInputSchema } from "@frumptious_clone/common";
+import {
+  userSignInInputSchema,
+  userSignUpInputSchema,
+} from "@frumptious_clone/common";
 
 const user = new Hono<{
-  Bindings: Bindings,
-  Variables: Variables
-}>()
-user.post('/signin', async (c) => {
+  Bindings: Bindings;
+  Variables: Variables;
+}>();
+user.post("/signup", async (c) => {
   try {
-    console.log(c.env.DATABASE_URL)
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
-    }
-    ).$extends(withAccelerate());
+    }).$extends(withAccelerate());
 
-    const { username, password, email } = await c.req.json()
-    if (!username || !email || !password) return c.json({
-      message: "fields are missing",
-      success: false
-    });
+    const { username, password, email } = await c.req.json();
+    if (!username || !email || !password)
+      return c.json({
+        message: "Input fields are missing",
+        success: false,
+      });
     const { success } = userSignInInputSchema.safeParse({
       username,
       email,
-      password
+      password,
     });
-    if (!success) return c.json({
-      message: "Invalid inputs",
-      success: false
-    });
+    if (!success)
+      return c.json({
+        message: "Invalid inputs (passowrd must contain atleast 6 characters)",
+        success: false,
+      });
     const emailAlreadyExist = await prisma.user.findUnique({
       where: {
-        email
-      }
-    })
-    if (emailAlreadyExist) return c.json({
-      message: "email already exist",
-      success: false
-    })
+        email,
+      },
+    });
+    if (emailAlreadyExist)
+      return c.json({
+        message: "Email already exist",
+        success: false,
+      });
     const user = await prisma.user.create({
       data: {
         username,
         email,
-        password
-      }
+        password,
+      },
     });
-    console.log(user)
-    const token = await sign({
-      userId: user?.id,
-      email
-    }, c.env.jwtSecret)
+    const token = await sign(
+      {
+        userId: user?.id,
+        email,
+      },
+      c.env.jwtSecret
+    );
     return c.json({
       token,
-      success: true
-    })
+      success: true,
+    });
   } catch (error) {
     console.error(error);
     c.status(403);
   }
+});
 
-})
-
-user.post('/signup', async (c) => {
+user.post("/signin", async (c) => {
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
@@ -72,34 +77,34 @@ user.post('/signup', async (c) => {
 
     const { success } = userSignUpInputSchema.safeParse({
       email,
-      password
+      password,
     });
-    if (!success) return c.json({
-      message: "Invalid inputs",
-      success: false
-    });
+    if (!success)
+      return c.json({
+        message: "Invalid inputs",
+        success: false,
+      });
     if (!(email && password)) {
       return c.json({
-        message: "missing credentials",
-        success: false
-      })
+        message: "Missing credentials",
+        success: false,
+      });
     }
     const user = await prisma.user.findUnique({
       where: {
-        email
-      }
+        email,
+      },
     });
-    console.log(user)
     if (!user) {
       return c.json({
-        message: "login failed",
-        success: false
-      })
+        message: "Can't find user! please sign up",
+        success: false,
+      });
     }
-    const is_password_correct: boolean = (password == user?.password);
+    const is_password_correct: boolean = password == user?.password;
     if (!is_password_correct) {
       return c.json({
-        message: "password is incorrect",
+        message: "Password is incorrect",
         success: false,
       });
     }
@@ -109,38 +114,35 @@ user.post('/signup', async (c) => {
     };
     const token = await sign(payload, c.env.jwtSecret);
     return c.json({
-      message: "user logged in successfully",
+      message: "User logged in successfully",
       success: true,
       token,
     });
   } catch (error) {
     console.error(error);
-    c.status(403)
+    c.status(403);
   }
-})
+});
 
-user.get('/blog', async (c) => {
+user.get("/blog", async (c) => {
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    const userId = c.get('userId');
+    const userId = c.get("userId");
     const blogs = await prisma.post.findMany({
       where: {
         authorId: userId,
-      }
+      },
     });
     return c.json({
       blogs,
       success: true,
-    })
+    });
   } catch (error) {
     console.error(error);
-    return c.json({
-      message: "error",
-      success: false
-    })
+    return c.status(403);
   }
-})
+});
 
-export default user
+export default user;

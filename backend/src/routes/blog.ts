@@ -20,41 +20,47 @@ blog.post('/', async (c) => {
       content
     });
     if (!success) return c.json({
-      message: "invalid inputs",
+      message: "Invalid inputs",
       success: false
     });
     const authorId = c.get('userId');
     if (!title) return c.json({
-      message: "title is missing",
+      message: "Title is missing",
       success: false
     });
     if (!content) return c.json({
-      message: "content is missing",
+      message: "Content is missing",
       success: false
     });
-    const blog = await prisma.user.update({
-      where: {
-        id: authorId,
-      }, data: {
-        post: {
-          create: {
-            title,
-            content,
-          }
-        }
+    const blog = await prisma.post.create({
+      data: {
+        title,
+        content,
+        authorId
       }
     });
+    // const blog = await prisma.user.update({
+    //   where: {
+    //     id: authorId,
+    //   }, data: {
+    //     post: {
+    //       create: {
+    //         title,
+    //         content,
+    //       }
+    //     }
+    //   }, select: {
+    //     post: true,
+    //   }
+    // });
     return c.json({
-      message: "blog posted",
+      message: "Blog posted",
       blog,
       success: true,
     });
   } catch (error) {
     console.error(error);
-    return c.json({
-      message: "failed to post",
-      success: false
-    })
+    return c.status(403);
   }
 })
 
@@ -87,20 +93,30 @@ blog.get('/', async (c) => {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    const blogs = await prisma.post.findMany();
+    const blogs = await prisma.post.findMany({
+      select: {
+        createdAt: true,
+        title: true,
+        id: true,
+        content: true,
+        published: true,
+        author: {
+          select: {
+            username: true,
+            email: true,
+            id: true,
+          }
+        }
+      }
+    });
     const publishedBlogs = blogs.filter((blog) => blog.published);
     return c.json({
       publishedBlogs,
       success: true
     })
-
   } catch (error) {
     console.error(error);
-    return c.json({
-      message: "server error",
-      success: false
-    })
-
+    return c.status(403);
   }
 })
 
@@ -116,7 +132,7 @@ blog.put('/', async (c) => {
       blogId
     });
     if (!success) return c.json({
-      message: "invalid inputs",
+      message: "Invalid inputs",
       success: false
     });
     const blog = await prisma.post.update({
@@ -128,16 +144,13 @@ blog.put('/', async (c) => {
       }
     });
     return c.json({
-      message: "updated",
+      message: "Updated",
       blog,
       success: true,
     })
   } catch (error) {
     console.error(error);
-    return c.json({
-      message: "failed to update",
-      success: false,
-    })
+    return c.status(403);
   }
 })
 
