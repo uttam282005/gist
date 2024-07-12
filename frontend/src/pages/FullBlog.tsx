@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../config"
 import { Appbar } from "../components/Appbar";
@@ -6,36 +5,42 @@ import { Error } from "../components/Error";
 import { Spinner } from "../components/Spinner";
 import { useParams } from "react-router-dom";
 import { useSerialize } from "../hooks";
+import axios from "axios";
 import { MDXRemote } from "next-mdx-remote";
 
 export const FullBlog = () => {
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const serializedContent = useSerialize(content);
 
   useEffect(() => {
-    try {
-      async function getBlog() {
+    async function getBlog() {
+      try {
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
           headers: {
-            authorization: 'Bearer ' + localStorage.getItem('token'),
+            authorization: 'Bearer ' + localStorage.getItem('token')
           }
         });
-        setTitle(res.data.blog.title);
-        setContent(res.data.blog.content);
+        if (!res.data.success) {
+          setLoading(false)
+          setError(true);
+          setErrorMessage(res.data.message);
+        } else {
+          setTitle(res.data.blog.title);
+          setContent(res.data.blog.content);
+          setLoading(false);
+        }
+      } catch (error) {
+        setError(true);
+        setErrorMessage('Internal server error');
         setLoading(false);
       }
-      getBlog();
-    } catch (error) {
-      console.error(error);
-      setError(true);
-      setErrorMessage('Internal server error');
-      setLoading(false)
     }
+    getBlog();
   }, []);
 
   return loading ?

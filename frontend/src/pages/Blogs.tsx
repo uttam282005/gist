@@ -40,15 +40,15 @@ export const Blogs = () => {
           setLoading(false);
         }
       }).catch((error) => {
-        setLoading(false);
-        console.error(error);
-        setError(true);
-        setErrorMessage("Internal server error");
+        console.error(error)
+          setLoading(false);
+          setError(true);
+          setErrorMessage("Internal server error");
       });
     } catch (error) {
       setLoading(false);
       setError(true);
-      setErrorMessage("server error");
+      setErrorMessage("Internal server error");
       console.error(error);
     }
   }, []);
