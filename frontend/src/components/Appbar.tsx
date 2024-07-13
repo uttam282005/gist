@@ -13,9 +13,6 @@ const defaultNavLinks: NavLink[] = [
   { name: 'Create', href: '/publish' },
 ];
 
-type AppbarInput = { navLinks: NavLink[] };
-
-
 export const Appbar = ({ navLinks = defaultNavLinks }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
