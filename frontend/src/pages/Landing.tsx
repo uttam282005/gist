@@ -1,5 +1,7 @@
 import React from 'react';
 import { BookOpen, Star, TrendingUp } from 'lucide-react';
+import { Appbar } from '../components/Appbar';
+import { NavLink } from '../components/Appbar';
 import { Link } from 'react-router-dom';
 
 interface BlogPost {
@@ -58,23 +60,17 @@ const BlogPost: React.FC<BlogPost> = ({ title, author, date, readTime, image, li
 );
 
 export const Landing: React.FC = () => {
+  const navLinks: NavLink[] = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Blogs', href: '/blogs' },
+    { name: 'Create', href: '/publish' },
+    { name: 'Sign up', href: '/signup' },
+    { name: 'Sign in', href: '/signin' }
+  ];
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Gist</h1>
-          <nav>
-            <ul className="flex space-x-4">
-              <li><a href="/about" className="text-gray-600 hover:text-gray-800">Our story</a></li>
-              <li><a href="/blogs" className="text-gray-600 hover:text-gray-800">Blogs</a></li>
-              <li><a href="/publish" className="text-gray-600 hover:text-gray-800">Write</a></li>
-              <li><a href="/signin" className="text-gray-600 hover:text-gray-800">Sign In</a></li>
-              <li><a href="/signup" className="text-gray-600 hover:text-gray-800">Sign Up</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
+    <div className="bg-gray-200 min-h-screen">
+      <Appbar navLinks={navLinks} />
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
           <h2 className="text-3xl font-bold mb-6">Featured Stories</h2>

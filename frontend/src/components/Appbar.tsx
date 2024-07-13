@@ -1,19 +1,22 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
-interface NavLink {
+export interface NavLink {
   name: string,
   href: string
 }
 
-const navLinks: NavLink[] = [
+const defaultNavLinks: NavLink[] = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Blogs', href: '/blogs' },
   { name: 'Create', href: '/publish' },
 ];
 
-export const Appbar = () => {
+type AppbarInput = { navLinks: NavLink[] };
+
+
+export const Appbar = ({ navLinks = defaultNavLinks }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
     <nav className="bg-white shadow-sm">
