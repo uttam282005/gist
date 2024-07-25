@@ -8,6 +8,15 @@ export interface BlogCardInput {
   authorName: string;
   createdAt: string;
 }
+const getDateAndTime = (dateString: string) => {
+  let date = new Date(dateString);
+  let localDate = date.toDateString();
+  let time = date.toLocaleTimeString();
+  return {
+    localDate,
+    time
+  };
+}
 
 export const BlogCard = ({
   id,
@@ -30,7 +39,7 @@ export const BlogCard = ({
             </div>
           </div>
           <div className="ml-1 text-gray-400 text-sm font-thin">
-            {createdAt}
+            {getDateAndTime(createdAt).localDate} at {getDateAndTime(createdAt).time}
           </div>
         </div>
         <div className="flex flex-col">
