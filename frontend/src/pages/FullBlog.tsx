@@ -4,9 +4,8 @@ import { Appbar } from "../components/Appbar";
 import { Error } from "../components/Error";
 import { Spinner } from "../components/Spinner";
 import { useParams } from "react-router-dom";
-import { useSerialize } from "../hooks";
 import axios from "axios";
-import { MDXRemote } from "next-mdx-remote";
+import { ShowMDX } from "../components/ShowMDX";
 
 export const FullBlog = () => {
   const { id } = useParams();
@@ -15,7 +14,6 @@ export const FullBlog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const serializedContent = useSerialize(content);
 
   useEffect(() => {
     async function getBlog() {
@@ -63,7 +61,7 @@ export const FullBlog = () => {
             </header>
             <div className="p-6">
               <div className="prose max-w-none">
-                {serializedContent !== null && <MDXRemote {...serializedContent} />}
+                <ShowMDX source={content} />
               </div>
             </div>
           </article>

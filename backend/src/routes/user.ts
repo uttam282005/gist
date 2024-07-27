@@ -31,7 +31,7 @@ user.post("/signup", async (c) => {
     });
     if (!success)
       return c.json({
-        message: "Invalid inputs (passowrd must contain atleast 6 characters)",
+        message: "Invalid inputs (passowrd must contain atleast 6 characters and Email should be of valid format!)",
         success: false,
       });
     const emailAlreadyExist = await prisma.user.findUnique({

@@ -6,14 +6,14 @@ export const authenticateUser = createMiddleware(async (c, next) => {
     const authHeader: string | undefined = c.req.header('authorization');
     if (!authHeader) {
       return c.json({
-        message: "User not signed up",
+        message: "User has not signed up",
         success: false
       });
     }
     const token: string | undefined = authHeader.split(' ')[1];
     if (!token) {
       return c.json({
-        message: "User not signed in",
+        message: "User has not signed in",
         success: false
       })
     };
@@ -21,7 +21,7 @@ export const authenticateUser = createMiddleware(async (c, next) => {
       const payload = await verify(token, c.env.jwtSecret);
       if (!payload) {
         return c.json({
-          message: "User not signed in",
+          message: "User has not signed in",
           success: false
         });
       }
@@ -30,7 +30,7 @@ export const authenticateUser = createMiddleware(async (c, next) => {
     } catch (error) {
       console.error(error);
       return c.json({
-        message: "User not signed up",
+        message: "User has not signed up",
         success: false
       })
     }
