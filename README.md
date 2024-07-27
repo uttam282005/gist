@@ -14,4 +14,5 @@ Welcome to my blogging website! This project is a fully-featured blogging platfo
 ## Features
 
 - **Markdown Support:** Write your blog posts in Markdown for easy formatting and readability.
+- **Syntax  Highlighting for code**
 - **More to come...**
