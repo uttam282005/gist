@@ -4,6 +4,8 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import rehypePrettyCode from "rehype-pretty-code";
 import { useEffect, useRef, useState } from 'react';
+import { Error } from "./Error";
+import { Spinner } from "./Spinner";
 
 export const ShowMDX = ({ source }: { source: string }) => {
   const previewRef = useRef<HTMLDivElement | null>(null);
@@ -20,8 +22,7 @@ export const ShowMDX = ({ source }: { source: string }) => {
           })
           .process(source);
 
-        previewRef.current !== null ? previewRef.current.innerHTML = String(file).trim() : setError(true);
-        console.log(String(file));
+        previewRef.current ? previewRef.current.innerHTML = String(file).trim() : null;
       } catch (error) {
         console.error("Error compiling MDX:", error);
         setError(true);
@@ -30,10 +31,8 @@ export const ShowMDX = ({ source }: { source: string }) => {
     compileMdx();
   }, [source]);
 
-  return !error ? (
-    <div ref={previewRef}></div>
-  ) : (
-    <div>Compilation failed</div>
-  );
+  return (
+    !error ? <div ref={previewRef}></div> : <Error message={"Compilation failed"} />
+  )
 };
 
