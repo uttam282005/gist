@@ -5,7 +5,6 @@ import rehypeStringify from "rehype-stringify";
 import rehypePrettyCode from "rehype-pretty-code";
 import { useEffect, useRef, useState } from 'react';
 import { Error } from "./Error";
-import { Spinner } from "./Spinner";
 
 export const ShowMDX = ({ source }: { source: string }) => {
   const previewRef = useRef<HTMLDivElement | null>(null);
@@ -22,7 +21,7 @@ export const ShowMDX = ({ source }: { source: string }) => {
           })
           .process(source);
 
-        previewRef.current ? previewRef.current.innerHTML = String(file).trim() : null;
+        previewRef.current ? previewRef.current.innerHTML = String(file).trim() : setError(true);
       } catch (error) {
         console.error("Error compiling MDX:", error);
         setError(true);
