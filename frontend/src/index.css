@@ -46,4 +46,16 @@
     font-weight: 400;
     line-height: 1.5;
   }
+
+  code {
+    @apply overflow-auto max-h-80 py-2 px-2 text-sm
+  }
+
+  code:not([data-language]) {
+    @apply text-sm py-0.5 px-1 rounded-sm;
+    font-family: 'Fira Code', 'Cascadia Code', 'Courier New', Courier, monospace;
+    background-color: #2d2d2d; /* Dark background color */
+    color: #e0e0e0; /* Light text color */
+ }
+
 }
