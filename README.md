@@ -1,4 +1,6 @@
-Welcome to my blogging website! This project is a fully-featured blogging platform built with modern web technologies.
+# Modern Blogging Platform
+
+Welcome to our blogging website! This project is a fully-featured blogging platform built with modern web technologies.
 
 ## Tech Stack
 
@@ -14,5 +16,7 @@ Welcome to my blogging website! This project is a fully-featured blogging platfo
 ## Features
 
 - **Markdown Support:** Write your blog posts in Markdown for easy formatting and readability.
-- **Syntax  Highlighting for code**
-- **More to come...**
+- **Syntax Highlighting for Code:** Showcase your code snippets with beautiful syntax highlighting.
+- **AI-Powered Blog Summarization:** Get a quick gist of full blog posts using AI technology.
+- **More to come...** Stay tuned for additional exciting features!
+
