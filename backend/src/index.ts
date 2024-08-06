@@ -7,6 +7,7 @@ export type Bindings = {
   jwtSecret: string,
   cryptoKey: string,
   directUrl: string
+  GROQ_API_KEY: string,
 }
 export type Variables = Record<string, any>
 
