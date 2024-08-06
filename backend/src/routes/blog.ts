@@ -3,11 +3,13 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
 import { Bindings, Variables } from "..";
+import Groq from "groq-sdk";
 
 const blog = new Hono<{
   Bindings: Bindings,
   Variables: Variables
 }>()
+
 
 blog.post('/', async (c) => {
   try {
@@ -39,20 +41,6 @@ blog.post('/', async (c) => {
         authorId
       }
     });
-    // const blog = await prisma.user.update({
-    //   where: {
-    //     id: authorId,
-    //   }, data: {
-    //     post: {
-    //       create: {
-    //         title,
-    //         content,
-    //       }
-    //     }
-    //   }, select: {
-    //     post: true,
-    //   }
-    // });
     return c.json({
       message: "Blog posted",
       blog,
@@ -144,11 +132,59 @@ blog.put('/', async (c) => {
       }
     });
     return c.json({
-      message: "Updated",
+      message: "Blog updated",
       blog,
       success: true,
     })
   } catch (error) {
+    console.error(error);
+    return c.status(403);
+  }
+})
+blog.get('/summarize/:id', async (c) => {
+  try {
+    const blogId = c.req.param('id');
+    if (!blogId) {
+      return c.json({
+        message: "Blog content is missing",
+        status: false
+      })
+    }
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const blog = await prisma.post.findUnique({
+      where: {
+        id: blogId,
+      }
+    });
+    if (!blog) {
+      return c.json({
+        message: "Blog not found",
+        status: false
+      })
+    }
+    const groq = new Groq({ apiKey: c.env.GROQ_API_KEY })
+    const completion = await groq.chat.completions
+      .create({
+        messages: [
+          {
+            role: "system",
+            content: "You are a highly skilled AI trained in language comprehension and summarization. I would like you to read the following text and summarize it into a concise abstract paragraph. Aim to retain the most important points, providing a coherent and readable summary that could help a person understand the main points of the discussion without needing to read the entire text. Please avoid unnecessary details or tangential points and only respond with a summary"
+          },
+          {
+            role: "user",
+            content: blog?.content || "",
+          },
+        ],
+        model: "llama3-70b-8192",
+      })
+    return c.json({
+      summary: completion.choices[0].message.content,
+      status: true,
+    });
+  }
+  catch (error) {
     console.error(error);
     return c.status(403);
   }
