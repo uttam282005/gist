@@ -72,7 +72,11 @@ export const FullBlog = () => {
   const handleSummarize = async () => {
     try {
       setSummaryLoading(true);
-      const res = await axios.get(`${BACKEND_URL}/api/v1/blog/summarize/${id}`);
+      const res = await axios.get(`${BACKEND_URL}/api/v1/blog/summarize/${id}`, {
+        headers: {
+          authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      });
       if (res.data.status) {
         setSummary(res.data.summary);
         setSummaryLoading(false);
