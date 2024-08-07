@@ -47,9 +47,7 @@ export const FullBlog = () => {
     async function getBlog() {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
-          headers: {
-            authorization: 'Bearer ' + localStorage.getItem('token')
-          }
+          withCredentials: true
         });
         if (!res.data.success) {
           setError(true);
@@ -73,9 +71,7 @@ export const FullBlog = () => {
     try {
       setSummaryLoading(true);
       const res = await axios.get(`${BACKEND_URL}/api/v1/blog/summarize/${id}`, {
-        headers: {
-          authorization: 'Bearer ' + localStorage.getItem('token')
-        }
+        withCredentials: true
       });
       if (res.data.status) {
         setSummary(res.data.summary);

@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { sign } from "hono/jwt";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Bindings, Variables } from "..";
+import { setCookie } from "hono/cookie";
 import {
   userSignInInputSchema,
   userSignUpInputSchema,
@@ -58,8 +59,12 @@ user.post("/signup", async (c) => {
       },
       c.env.jwtSecret
     );
+    setCookie(c, 'jwtToken', token, {
+      httpOnly: true,
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    });
     return c.json({
-      token,
       success: true,
     });
   } catch (error) {
@@ -74,7 +79,6 @@ user.post("/signin", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const { email, password } = await c.req.json();
-
     const { success } = userSignUpInputSchema.safeParse({
       email,
       password,
@@ -113,10 +117,14 @@ user.post("/signin", async (c) => {
       email,
     };
     const token = await sign(payload, c.env.jwtSecret);
+    setCookie(c, 'jwtToken', token, {
+      httpOnly: true,
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    });
     return c.json({
       message: "User logged in successfully",
       success: true,
-      token,
     });
   } catch (error) {
     console.error(error);

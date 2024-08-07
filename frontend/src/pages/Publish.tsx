@@ -48,9 +48,7 @@ export const Publish = () => {
                   title,
                   content: description
                 }, {
-                  headers: {
-                    authorization: 'Bearer ' + localStorage.getItem("token")
-                  }
+                  withCredentials: true
                 });
                 if (!response.data.success) {
                   setError(true);

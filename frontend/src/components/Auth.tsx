@@ -26,12 +26,13 @@ export const Auth = ({ type, }: { type: "signin" | "signup" }) => {
       setLoading(true);
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/${type}`,
-        input
+        input, {
+        withCredentials: true
+      }
       );
       setLoading(false);
-      const { token } = response.data;
-      if (response.data.success && token) {
-        localStorage.setItem("token", token);
+      const { success } = response.data;
+      if (success) {
         navigate("/blogs");
       } else {
         setError(true);
@@ -40,7 +41,7 @@ export const Auth = ({ type, }: { type: "signin" | "signup" }) => {
     } catch (error) {
       setLoading(false)
       setError(true);
-      seterrorMessage("Server error");
+      seterrorMessage("Internal Server error");
       console.error(error);
     }
   }

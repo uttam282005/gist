@@ -1,27 +1,21 @@
 import { createMiddleware } from "hono/factory";
 import { verify } from "hono/jwt";
+import { getCookie } from 'hono/cookie'
 
 export const authenticateUser = createMiddleware(async (c, next) => {
   try {
-    const authHeader: string | undefined = c.req.header('authorization');
-    if (!authHeader) {
+    const token: string | undefined = getCookie(c, 'jwtToken');
+    if (!token) {
       return c.json({
         message: "User has not signed up",
         success: false
-      });
-    }
-    const token: string | undefined = authHeader.split(' ')[1];
-    if (!token) {
-      return c.json({
-        message: "User has not signed in",
-        success: false
       })
-    };
+    }
     try {
       const payload = await verify(token, c.env.jwtSecret);
       if (!payload) {
         return c.json({
-          message: "User has not signed in",
+          message: "User has not signed up",
           success: false
         });
       }

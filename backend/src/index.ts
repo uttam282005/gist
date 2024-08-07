@@ -13,7 +13,10 @@ export type Variables = Record<string, any>
 
 const app = new Hono()
 
-app.use(cors())
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://gist-smoky.vercel.app/'],
+  credentials: true
+}))
 app.route('/api/v1', api)
 
 export default app

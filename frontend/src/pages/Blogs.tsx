@@ -27,9 +27,7 @@ export const Blogs = () => {
     try {
       setLoading(true);
       axios.get(`${BACKEND_URL}/api/v1/blog`, {
-        headers: {
-          authorization: 'Bearer ' + localStorage.getItem("token"),
-        }
+        withCredentials: true
       }).then((res) => {
         if (res.data.success) {
           setBlogs(res.data.publishedBlogs);
@@ -41,9 +39,9 @@ export const Blogs = () => {
         }
       }).catch((error) => {
         console.error(error)
-          setLoading(false);
-          setError(true);
-          setErrorMessage("Internal server error");
+        setLoading(false);
+        setError(true);
+        setErrorMessage("Internal server error");
       });
     } catch (error) {
       setLoading(false);

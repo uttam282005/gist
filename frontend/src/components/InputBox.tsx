@@ -15,7 +15,7 @@ export const InputBox = ({ label, placeholder, onChange }: InputBox) => {
           type="text"
           placeholder={placeholder}
           onChange={onChange}
-          className="mb-3 border border-gray-300 placeholder:text-sm rounded-md px-2 pb-1 sadow-sm h-9 w-80 focus:border-gray-400"
+          className="mb-3 border border-gray-300 placeholder:text-sm placeholder:text-gray-300 rounded-md px-2 pb-1 sadow-sm h-9 w-80 focus:border-gray-400"
         />
       </div>
     </div>
