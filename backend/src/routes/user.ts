@@ -130,13 +130,18 @@ user.get("/blog", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const userId = c.get("userId");
-    const blogs = await prisma.post.findMany({
+    const user = await prisma.user.findUnique({
       where: {
-        authorId: userId,
+        id: userId,
       },
+      select: {
+        post: true,
+        username: true,
+        id: true
+      }
     });
     return c.json({
-      blogs,
+      user,
       success: true,
     });
   } catch (error) {
@@ -144,5 +149,37 @@ user.get("/blog", async (c) => {
     return c.status(403);
   }
 });
+user.get('/:id', async (c) => {
+  try {
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const userId = c.req.param('id');
+    const userDetails = await prisma.post.findMany({
+      where: {
+        authorId: userId,
+      }, select: {
+        createdAt: true,
+        title: true,
+        id: true,
+        content: true,
+        author: {
+          select: {
+            username: true,
+            id: true,
+            email: true,
+          }
+        }
+      }
+    });
+    return c.json({
+      userDetails,
+      success: true,
+    })
+  } catch (error) {
+    console.error(error);
+    return c.status(403);
+  }
 
+})
 export default user;

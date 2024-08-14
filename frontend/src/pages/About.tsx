@@ -13,7 +13,7 @@ const TeamMember: React.FC<{ name: string; role: string; image: string }> = ({ n
 const AboutPage: React.FC = () => {
   return (
     <div>
-      <Appbar />
+      <Appbar showAvator={false}/>
       <div className="bg-gray-100 min-h-screen">
         <header className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-6">

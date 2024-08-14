@@ -70,7 +70,7 @@ export const Landing: React.FC = () => {
   ];
   return (
     <div className="bg-gray-200 min-h-screen">
-      <Appbar navLinks={navLinks} />
+      <Appbar navLinks={navLinks} showAvator={false} />
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
           <h2 className="text-3xl font-bold mb-6">Featured Stories</h2>
