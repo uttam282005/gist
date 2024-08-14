@@ -13,7 +13,6 @@ export const Profile = () => {
   const navigate = useNavigate();
   const currentSession = useContext(CurrentSessionContext);
   const currentUserId = currentSession?.id;
-  console.log(currentUserId);
   const handleEdit = (postId: string) => {
     navigate(`/update/${postId}`)
   };

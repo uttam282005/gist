@@ -20,7 +20,6 @@ export const UpdateBlog = () => {
   const [description, setDescription] = useState<string>();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const getBlog = async () => {
       setLoading(true);
