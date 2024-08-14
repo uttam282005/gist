@@ -61,7 +61,17 @@ blog.get('/:id', async (c) => {
     const blog = await prisma.post.findUnique({
       where: {
         id: blogId,
-      },
+      }, select: {
+        title: true,
+        content: true,
+        author: {
+          select: {
+            username: true,
+            email: true,
+            id: true
+          }
+        }
+      }
     });
     if (!blog) return c.json({
       message: "Blog not found",

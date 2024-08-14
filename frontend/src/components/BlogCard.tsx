@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { Avator } from "./Avator";
 
 export interface BlogCardInput {
-  id: string;
-  title: string;
-  content: string;
-  authorName: string;
-  createdAt: string;
+  id: string,
+  title: string,
+  content: string,
+  authorName: string,
+  authorId?: string,
+  createdAt: string,
 }
-const getDateAndTime = (dateString: string) => {
+export const getDateAndTime = (dateString: string) => {
   let date = new Date(dateString);
   let localDate = date.toDateString();
   let time = date.toLocaleTimeString();
@@ -23,6 +24,7 @@ export const BlogCard = ({
   content,
   title,
   authorName,
+  authorId,
   createdAt,
 }: BlogCardInput) => {
   return (
@@ -30,9 +32,9 @@ export const BlogCard = ({
       <div>
         <div className="flex justify-normal">
           <div className="flex flex-col justify-center ml-2">
-            <Avator name={authorName} size="sm" />
+            <Avator name={authorName} size="sm" id={authorId} />
           </div>
-          <div className="ml-2 text-sm font-thin flex">
+          <div className="ml-2 text-sm font-thin flex text-slate-600">
             {authorName}
             <div className="flex flex-col pt-2">
               <div className="ml-2 h-1 w-1 bg-slate-400 rounded-full flex flex-col"></div>

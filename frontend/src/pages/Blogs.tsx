@@ -3,9 +3,9 @@ import { Appbar } from "../components/Appbar"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../config"
-import { Spinner } from "../components/Spinner"
 import { Error } from "../components/Error"
 import { indexOf } from "lodash"
+import { BlogCardSkeleton } from "../components/Skeleton"
 
 export interface Blog {
   "content": string;
@@ -13,7 +13,8 @@ export interface Blog {
   "title": string;
   "id": string;
   "author": {
-    "username": string
+    "username": string,
+    "id": string
   }
 }
 
@@ -41,9 +42,9 @@ export const Blogs = () => {
         }
       }).catch((error) => {
         console.error(error)
-          setLoading(false);
-          setError(true);
-          setErrorMessage("Internal server error");
+        setLoading(false);
+        setError(true);
+        setErrorMessage("Internal server error");
       });
     } catch (error) {
       setLoading(false);
@@ -53,7 +54,11 @@ export const Blogs = () => {
     }
   }, []);
   return (loading ?
-    <Spinner />
+    <div className="flex justify-center flex-col place-items-center">
+      <BlogCardSkeleton />
+      <BlogCardSkeleton />
+      <BlogCardSkeleton />
+    </div>
     : error ?
       <div className="min-h-screen flex flex-col">
         <Appbar />
@@ -67,7 +72,7 @@ export const Blogs = () => {
           <Appbar />
         </div>
         <div className="flex justify-center flex-col place-items-center">
-          {blogs && blogs[0] ? blogs?.map((blog) => <BlogCard key={indexOf(blogs, blog)} id={blog.id} title={blog.title} content={blog.content} authorName={blog.author.username} createdAt={blog.createdAt} />) : <div>No blogs found </div>}
+          {blogs && blogs[0] ? blogs?.map((blog) => <BlogCard key={indexOf(blogs, blog)} id={blog.id} title={blog.title} content={blog.content} authorName={blog.author.username} createdAt={blog.createdAt} authorId={blog.author.id} />) : <div>No blogs found </div>}
         </div>
       </div >
   )
