@@ -22,7 +22,6 @@ export const UseGetUserProfile = (id: string) => {
           authorization: 'Bearer ' + localStorage.getItem('token')
         }
       });
-      console.log(response.data.userDetails)
       setUserPosts(response.data.userDetails);
     }
     getUserData()
