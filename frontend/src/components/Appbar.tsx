@@ -1,9 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Avator } from './Avator';
-import axios from 'axios';
-import { Menu, ReceiptPoundSterling, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { BACKEND_URL } from '../config';
+import { Menu, X } from 'lucide-react';
 import { CurrentSessionContext } from '../contexts';
 
 export interface NavLink {

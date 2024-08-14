@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Appbar } from "../components/Appbar"
 import { Preview } from "./Preview";
 import { BACKEND_URL } from "../config";
