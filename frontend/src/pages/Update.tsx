@@ -41,7 +41,7 @@ export const UpdateBlog = () => {
       }
     }
     getBlog();
-  }, []);
+  });
 
   return (loading) ? <Spinner /> : error ?
     <div className="min-h-screen flex flex-col">
