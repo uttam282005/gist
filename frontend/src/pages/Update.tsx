@@ -14,7 +14,7 @@ export const UpdateBlog = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [title, setTitle] = useState<string>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const [description, setDescription] = useState<string>();
@@ -28,8 +28,8 @@ export const UpdateBlog = () => {
         }
       });
       if (response.data.success) {
-        contentRef.current!.innerHTML = response.data.blog.content;
-        titleRef.current!.value = response.data.blog.title;
+        if (contentRef.current) contentRef.current.innerHTML = response.data.blog.content;
+        if (titleRef.current) titleRef.current.value = response.data.blog.title;
         setTitle(response.data.blog.title);
         setDescription(response.data.blog.content);
         setLoading(false);
@@ -40,7 +40,7 @@ export const UpdateBlog = () => {
       }
     }
     getBlog();
-  });
+  }, [loading, error]);
 
   return (loading) ? <Spinner /> : error ?
     <div className="min-h-screen flex flex-col">
