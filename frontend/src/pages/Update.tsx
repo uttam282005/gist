@@ -29,8 +29,8 @@ export const UpdateBlog = () => {
         }
       });
       if (response.data.success) {
-        if (contentRef.current) contentRef.current.innerHTML = response.data.blog.content;
-        if (titleRef.current) titleRef.current.value = response.data.blog.title;
+        contentRef.current!.innerHTML = response.data.blog.content;
+        titleRef.current!.value = response.data.blog.title;
         setTitle(response.data.blog.title);
         setDescription(response.data.blog.content);
         setLoading(false);
