@@ -22,7 +22,6 @@ export const UpdateBlog = () => {
 
   useEffect(() => {
     const getBlog = async () => {
-      setLoading(true);
       const response = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
         headers: {
           authorization: 'Bearer ' + localStorage.getItem('token'),
