@@ -22,29 +22,31 @@ export const Profile = () => {
       <Appbar />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="space-y-6">
-          {userPosts && userPosts.map((userPost) => (
-            <div key={userPost.id} className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-              <div className="flex justify-between items-start mb-4">
-                <BlogCard
-                  title={userPost.title}
-                  authorId={id}
-                  content={userPost.content}
-                  createdAt={userPost.createdAt}
-                  authorName={userPost.author.username}
-                  id={userPost.id}
-                />
-                {
-                  currentUserId === userPost.author.id && <button
-                    onClick={() => handleEdit(userPost.id)}
-                    className="flex items-center gap-2 py-3"
-                  >
-                    <Pencil size={16} />
-                    Edit
-                  </button>
-                }
-              </div>
-            </div>
-          ))}
+          {
+            userPosts?.length == 0 ? <div className="flex justify-center font-bold text-4xl"> No blogs found </div> :
+              userPosts?.map((userPost) => (
+                <div key={userPost.id} className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
+                  <div className="flex justify-between items-start mb-4">
+                    <BlogCard
+                      title={userPost.title}
+                      authorId={id}
+                      content={userPost.content}
+                      createdAt={userPost.createdAt}
+                      authorName={userPost.author.username}
+                      id={userPost.id}
+                    />
+                    {
+                      currentUserId === userPost.author.id && <button
+                        onClick={() => handleEdit(userPost.id)}
+                        className="flex items-center gap-2 py-3"
+                      >
+                        <Pencil size={16} />
+                        Edit
+                      </button>
+                    }
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ export interface UserDetails {
   id: string;
   post: [];
 }
+
 export const CurrentSessionContext = createContext<UserDetails | undefined>({
   username: "",
   id: "",

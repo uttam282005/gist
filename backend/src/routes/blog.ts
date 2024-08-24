@@ -120,10 +120,21 @@ blog.get('/', async (c) => {
 
 blog.put('/', async (c) => {
   try {
+    const userId = c.get('userId');
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const { updatedContent, updatedTitle, blogId } = await c.req.json();
+    const blogToUpdate = await prisma.post.findUnique({
+      where: {
+        id: blogId,
+      }
+    });
+    if (userId !== blogToUpdate?.authorId)
+      return c.json({
+        message: "You are not authorised to edit this blog.",
+        success: false
+      })
     const { success } = updateBlogInputSchema.safeParse({
       updatedTitle,
       updatedContent,
