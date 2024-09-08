@@ -4,32 +4,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../compone
 import { BrainCircuit, MessageSquare, Pencil, Zap, Target, Rocket, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const blogPosts = [
-  {
-    title: "Computer Vision: The Science of Teaching Machines to See",
-    author: "Uttam Raj",
-    date: "July 12",
-    readTime: "5 min read",
-    link: "/blog/a501f579-a7b4-42ae-a45f-af7be66881b9",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBqVnr4rStp_c5W7dqN6tYkHwiA7unS7o7LQ&s",
-  },
-  {
-    title: "How to Write a Blog Post: A Step-by-Step Guide",
-    author: "Uttam",
-    date: "Mar 10",
-    readTime: "7 min read",
-    link: "/blog/e987739f-3ef6-43af-b71e-8df29ca9da09",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZbifEHJ5Zhnqjb7AYmWGDW9a4ZVL7-PDmKA&s",
-  },
-  {
-    title: "Deep Learning: Unlocking the Power of Neural Networks",
-    author: "Uttam Raj",
-    date: "Mar 5",
-    link: "/blog/fb360a12-4c09-4f99-9321-eaea8cab0bdf",
-    readTime: "6 min read",
-    image: "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Q0uAcG_S2J2gkcUaF5PyxA.png",
-  },
-];
 export default function LandingPage() {
   useEffect(() => {
     const handleScroll = (e: Event) => {
