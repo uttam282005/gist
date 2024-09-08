@@ -1,11 +1,19 @@
-import { useContext, useState } from 'react';
-import { Avator } from './Avator';
-import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { CurrentSessionContext } from '../contexts';
+import { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X, Sparkles } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { CurrentSessionContext } from '../contexts'
 
 export interface NavLink {
-  name: string,
+  name: string
   href: string
 }
 
@@ -14,77 +22,106 @@ const defaultNavLinks: NavLink[] = [
   { name: 'Blogs', href: '/blogs' },
   { name: 'About', href: '/about' },
   { name: 'Create', href: '/publish' },
-];
+]
 
-export const Appbar = ({ navLinks = defaultNavLinks, showAvator = true }: { navLinks?: NavLink[], showAvator?: boolean }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const currentUser = useContext(CurrentSessionContext);
-  const userId = currentUser?.id;
-  const username = currentUser?.username;
+export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navLinks?: NavLink[], showAvatar?: boolean }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const currentUser = useContext(CurrentSessionContext)
+  const userId = currentUser?.id
+  const username = currentUser?.username
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b border-border/40 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to={"/"}>
-                <span className="text-2xl font-bold text-gray-800">Gist</span>
-              </Link>
-            </div>
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-2">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <span className="text-2xl font-bold text-primary">Gist</span>
+            </Link>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <div className="hidden md:flex md:items-center md:space-x-6">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                to={link.href}
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
-            {showAvator ? <div className='inline-flex items-center px-1 pt-1 border-b-2 border-transparent'>
-              <Avator name={username} id={userId} />
-            </div> : null}
+            {showAvatar && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={`https://avatar.vercel.sh/${userId}.png`} alt={username} />
+                      <AvatarFallback>{username?.charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuItem>
+                    <Link to={`/profile/${userId}`} className="w-full">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/logout" className="w-full">Log out</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
-          <div className="flex items-center sm:hidden">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
+          <div className="flex items-center md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-muted-foreground"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
             >
-              <span className="sr-only">Open main menu</span>
               {isMenuOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
+                <X className="h-6 w-6" />
               ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
+                <Menu className="h-6 w-6" />
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu, show/hide based on menu state */}
-      {
-        isMenuOpen && (
-          <div className="sm:hidden" id="mobile-menu">
-            <div className="pt-2 pb-3 space-y-1">
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700"
+                  to={link.href}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
+              {showAvatar && (
+                <Link
+                  to="/profile"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Profile
+                </Link>
+              )}
             </div>
-          </div>
-        )
-      }
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav >
-  );
-};
-
+  )
+}

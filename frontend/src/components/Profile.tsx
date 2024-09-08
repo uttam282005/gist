@@ -23,7 +23,7 @@ export const Profile = () => {
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="space-y-6">
           {
-            userPosts?.length == 0 ? <div className="flex justify-center font-bold text-4xl"> No blogs found </div> :
+            userPosts?.length == 0 ? <div className="flex justify-center font-bold text-2xl"> No blogs found </div> :
               userPosts?.map((userPost) => (
                 <div key={userPost.id} className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
                   <div className="flex justify-between items-start mb-4">

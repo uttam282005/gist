@@ -13,13 +13,8 @@ const TeamMember: React.FC<{ name: string; role: string; image: string }> = ({ n
 const AboutPage: React.FC = () => {
   return (
     <div>
-      <Appbar showAvator={false}/>
+      <Appbar />
       <div className="bg-gray-100 min-h-screen">
-        <header className="bg-white shadow-sm">
-          <div className="container mx-auto px-4 py-6">
-            <h1 className="text-3xl font-bold text-gray-800">About Our Blog</h1>
-          </div>
-        </header>
 
         <main className="container mx-auto px-4 py-8">
           <section className="bg-white p-8 rounded-lg shadow-md mb-8">
