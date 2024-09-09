@@ -17,7 +17,7 @@ interface SummaryParams {
 
 const Summary = ({ summary, loading, error, errorMessage }: SummaryParams) => {
   if (loading) {
-    return <Spinner />
+    return null
   }
   if (error) {
     return <Error message={errorMessage} />;
@@ -142,7 +142,6 @@ export const FullBlog = () => {
               {
                 summaryLoading ? (
                   <>
-                    <Spinner />
                     Summarizing...
                   </>
                 ) : (

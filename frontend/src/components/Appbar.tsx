@@ -45,9 +45,10 @@ export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navL
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
               >
                 {link.name}
+                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
               </Link>
             ))}
             {showAvatar && (
@@ -65,10 +66,15 @@ export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navL
                     <Link to={`/profile/${userId}`} className="w-full">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/logout" className="w-full">Log out</Link>
+                    <Button onClick={() => {
+                      localStorage.removeItem('token');
+                      window.location.href = '/';
+                    }} className="w-full text-left">
+                      Log out
+                    </Button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+            </DropdownMenu>
             )}
           </div>
           <div className="flex items-center md:hidden">
