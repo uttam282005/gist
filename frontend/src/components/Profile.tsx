@@ -1,13 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { BACKEND_URL } from "../config";
 import { UseGetUserProfile } from "../hooks";
 import { BlogCard } from "./BlogCard";
 import { UserPosts } from "../hooks";
 import { Appbar } from "./Appbar";
-import { Pencil, User } from "lucide-react";
-import { useContext } from "react";
+import { Pencil, User, Trash2 } from "lucide-react";
+import { useContext, useState, useEffect } from "react";
 import { CurrentSessionContext } from "../contexts";
+import { Spinner } from "./Spinner";
 
 export const Profile = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [deletingPosts, setDeletingPosts] = useState<Set<string>>(new Set());
   const { id = "" } = useParams();
   const userPosts: UserPosts[] | undefined = UseGetUserProfile(id);
   const navigate = useNavigate();
@@ -16,6 +20,48 @@ export const Profile = () => {
   const handleEdit = (postId: string) => {
     navigate(`/update/${postId}`)
   };
+
+  const handleDelete = (postId: string) => {
+    setDeletingPosts(prev => new Set(prev).add(postId));
+    fetch(`${BACKEND_URL}/api/v1/blog/${postId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        console.error('Failed to delete the post');
+        setDeletingPosts(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(postId);
+          return newSet;
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting post:', error);
+      setDeletingPosts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(postId);
+        return newSet;
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (userPosts !== undefined) {
+      setIsLoading(false);
+    }
+  }, [userPosts]);
+
+  if (isLoading) {
+    return (
+        <Spinner />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -48,13 +94,23 @@ export const Profile = () => {
                     id={userPost.id}
                   />
                   {currentUserId === userPost.author.id && (
-                    <button
-                      onClick={() => handleEdit(userPost.id)}
-                      className="flex items-center gap-2 py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                    >
-                      <Pencil size={16} />
-                      Edit
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(userPost.id)}
+                        className="flex items-center gap-2 py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                      >
+                        <Pencil size={16} />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(userPost.id)}
+                        disabled={deletingPosts.has(userPost.id)}
+                        className="flex items-center gap-2 py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors disabled:bg-gray-400"
+                      >
+                        <Trash2 size={16} />
+                        {deletingPosts.has(userPost.id) ? 'Deleting...' : 'Delete'}
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

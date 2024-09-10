@@ -211,4 +211,38 @@ blog.get('/summarize/:id', async (c) => {
   }
 })
 
+blog.delete('/:id', async (c) => {
+  try {
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    
+    const blogId = c.req.param('id');
+    const userId = c.get('userId');
+
+    const blogToDelete = await prisma.post.findUnique({
+      where: { id: blogId },
+    });
+
+    if (userId !== blogToDelete?.authorId) {
+      return c.json({
+        message: "You are not authorized to delete this blog",
+        success: false
+      });
+    }
+
+    await prisma.post.delete({
+      where: { id: blogId },
+    });
+
+    return c.json({
+      message: "Blog deleted successfully",
+      success: true
+    });
+  } catch (error) {
+    console.error(error);
+    return c.status(500);
+  }
+});
+
 export default blog

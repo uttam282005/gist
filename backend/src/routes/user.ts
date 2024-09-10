@@ -182,4 +182,5 @@ user.get('/:id', async (c) => {
   }
 
 })
+
 export default user;
