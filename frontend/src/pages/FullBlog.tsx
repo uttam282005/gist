@@ -110,12 +110,7 @@ export const FullBlog = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
-        <Appbar />
-        <div className="flex-grow flex justify-center items-center">
-          <Error message={errorMessage} onClose={() => window.location.href = `/`} />
-        </div>
-      </div>
+      <Error message={errorMessage} onClose={() => window.location.href = `/`} />
     );
   }
 

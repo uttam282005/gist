@@ -216,7 +216,7 @@ blog.delete('/:id', async (c) => {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    
+
     const blogId = c.req.param('id');
     const userId = c.get('userId');
 
@@ -245,4 +245,73 @@ blog.delete('/:id', async (c) => {
   }
 });
 
+// blog.get('/vectorize/:id', async (c) => {
+//   try {
+//     const blogId = c.req.param('id');
+//     const prisma = new PrismaClient({
+//       datasourceUrl: c.env.DATABASE_URL,
+//     }).$extends(withAccelerate());
+//     const blog = await prisma.post.findUnique({
+//       where: {
+//         id: blogId,
+//       }
+//     });
+//     if (!blog) {
+//       return c.json({
+//         message: "Blog not found",
+//         status: false
+//       })
+//     }
+//     const { data } = await c.env.AI.run("@cf/baai/bge-base-en-v1.5", {
+//       text: [blog.content],
+//     });
+//     const values = data[0];
+//     console.log(data);
+
+//     if (!values) {
+//       return c.json({
+//         message: "Failed to generate vector embedding",
+//         success: false
+//       })
+//     }
+//     const inserted = await c.env.VECTOR_INDEX.upsert([{ id: blog.id, values }]);
+//     if (!inserted) {
+//       return c.json({
+//         message: "Failed to insert vector embedding",
+//         values,
+//         success: false
+//       })
+//     }
+//     return c.json({
+//       message: "Vector embedding inserted",
+//       success: true
+//     })
+//   }
+//   catch (error) {
+//     console.error(error);
+//     return c.status(403);
+//   }
+// })
+// blog.get('/chat/:id', async (c) => {
+//   try {
+//     const blogId = c.req.param('id');
+//     const { message } = await c.req.json();
+//     const embedding = await c.env.AI.run("@cf/baai/bge-base-en-v1.5", {
+//       text: [message],
+//     });
+//     const values = embedding.data[0];
+//     const results = await c.env.VECTOR_INDEX.query(values, {
+//       topK: 1,
+//       filter: `id = ${blogId}`,
+//     });
+//     return c.json({
+//       results,
+//       success: true
+//     });
+//   }
+//   catch (error) {
+//     console.error(error);
+//     return c.status(403);
+//   }
+// })
 export default blog

@@ -34,6 +34,7 @@ export const authenticateUser = createMiddleware(async (c, next) => {
         success: false
       })
     }
+   await next()
   } catch (error) {
     return c.status(403);
   }

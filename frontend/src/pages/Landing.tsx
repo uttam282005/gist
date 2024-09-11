@@ -116,61 +116,55 @@ export default function LandingPage() {
             <h2 className="text-3xl font-bold tracking-tighter text-center mb-8">
               Explore Our Demo Blogs
             </h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Link to="/blog/a501f579-a7b4-42ae-a45f-af7be66881b9">
-                <Card>
-                  <CardHeader>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <Link to="/blog/a501f579-a7b4-42ae-a45f-af7be66881b9" className="block">
+                <Card className="h-full flex flex-col">
+                  <CardHeader className="flex-grow-0">
                     <img
                       src="/placeholder.svg?height=200&width=400"
                       alt="AI in Blogging"
-                      width={400}
-                      height={200}
                       className="rounded-t-lg object-cover w-full h-[200px]"
                     />
-                    <CardTitle className="mt-4">Computer Vision: The Science of Teaching Machines to See</CardTitle>
+                    <CardTitle className="mt-4 text-lg">Computer Vision: The Science of Teaching Machines to See</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">Computer Vision is a field of artificial intelligence that enables machines to interpret and understand visual information from the world, much like humans do. By using techniques like image recognition, object detection, and deep learning, machines can process and analyze images or videos to perform tasks ranging from facial recognition to autonomous driving.</p>
+                  <CardContent className="flex-grow">
+                    <p className="text-muted-foreground text-sm line-clamp-3">Computer Vision is a field of artificial intelligence that enables machines to interpret and understand visual information from the world, much like humans do. By using techniques like image recognition, object detection, and deep learning, machines can process and analyze images or videos to perform tasks ranging from facial recognition to autonomous driving.</p>
                   </CardContent>
-                  <CardFooter>
-                    <Button variant="ghost">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                  <CardFooter className="flex-grow-0">
+                    <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
                   </CardFooter>
                 </Card>
               </Link>
-              <Card>
-                <CardHeader>
+              <Card className="h-full flex flex-col">
+                <CardHeader className="flex-grow-0">
                   <img
                     src="/placeholder.svg?height=200&width=400"
                     alt="Markdown Tips"
-                    width={400}
-                    height={200}
                     className="rounded-t-lg object-cover w-full h-[200px]"
                   />
-                  <CardTitle className="mt-4">10 Markdown Tips for Better Writing</CardTitle>
+                  <CardTitle className="mt-4 text-lg">10 Markdown Tips for Better Writing</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Learn how to leverage Markdown to streamline your writing process and create beautifully formatted content.</p>
+                <CardContent className="flex-grow">
+                  <p className="text-muted-foreground text-sm line-clamp-3">Learn how to leverage Markdown to streamline your writing process and create beautifully formatted content.</p>
                 </CardContent>
-                <CardFooter>
-                  <Button variant="ghost">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <CardFooter className="flex-grow-0">
+                  <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
                 </CardFooter>
               </Card>
-              <Card>
-                <CardHeader>
+              <Card className="h-full flex flex-col">
+                <CardHeader className="flex-grow-0">
                   <img
                     src="/placeholder.svg?height=200&width=400"
                     alt="Engaging Readers"
-                    width={400}
-                    height={200}
                     className="rounded-t-lg object-cover w-full h-[200px]"
                   />
-                  <CardTitle className="mt-4">Engaging Readers with Interactive Content</CardTitle>
+                  <CardTitle className="mt-4 text-lg">Engaging Readers with Interactive Content</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Discover strategies to create interactive blog posts that keep your audience engaged and coming back for more.</p>
+                <CardContent className="flex-grow">
+                  <p className="text-muted-foreground text-sm line-clamp-3">Discover strategies to create interactive blog posts that keep your audience engaged and coming back for more.</p>
                 </CardContent>
-                <CardFooter>
-                  <Button variant="ghost">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <CardFooter className="flex-grow-0">
+                  <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
                 </CardFooter>
               </Card>
             </div>

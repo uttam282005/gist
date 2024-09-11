@@ -34,4 +34,3 @@ export const ShowMDX = ({ source }: { source: string }) => {
     !error ? <div ref={previewRef}></div> : <Error message={"Compilation failed"} />
   )
 };
-

@@ -8,6 +8,12 @@ export type Bindings = {
   cryptoKey: string,
   directUrl: string
   GROQ_API_KEY: string,
+  AI: {
+    [key: string]: (...args: any[]) => Promise<any>
+  }
+  VECTOR_INDEX: {
+    [key: string]: (...args: any[]) => Promise<any>
+  }
 }
 export type Variables = Record<string, any>
 
