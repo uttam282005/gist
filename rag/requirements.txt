@@ -1,6 +1,6 @@
 alabaster==0.7.16
 apsw==3.45.2.0
-argcomplete==3.1.2.dev0+ga9059f3.d20240510
+argcomplete==3.1.2
 asttokens==2.4.1
 async-timeout==4.0.3
 attrs==23.2.1.dev0
