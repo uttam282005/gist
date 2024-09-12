@@ -13,6 +13,7 @@ import { CurrentSessionContext } from "./contexts";
 import { useEffect, useState } from "react";
 import { UserDetails } from "./contexts";
 import { UpdateBlog } from "./pages/Update";
+import Chat from "./pages/Chat";
 
 function App() {
   const [sessionData, setSessionData] = useState<UserDetails>();
@@ -41,6 +42,7 @@ function App() {
             <Route path="/publish" element={<Publish />} />
             <Route path="/profile/:id" element={<Profile />} />
             <Route path="/update/:id" element={<UpdateBlog />} />
+            <Route path="/chat/:id" element={<Chat />} />
           </Routes>
         </BrowserRouter >
       </CurrentSessionContext.Provider>

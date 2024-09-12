@@ -6,7 +6,8 @@ import { Spinner } from "../components/Spinner";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { ShowMDX } from "../components/ShowMDX";
-import { BookOpen, Clock, User } from 'lucide-react';
+import { BookOpen, Clock, User, MessageSquare } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface SummaryParams {
   summary: string,
@@ -49,6 +50,7 @@ export const FullBlog = () => {
   const [error, setError] = useState(false);
   const [summary, setSummary] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getBlog() {
@@ -102,6 +104,10 @@ export const FullBlog = () => {
     }
   };
 
+  const handleChatWithBlog = () => {
+    navigate(`/chat/${id}`);
+  };
+
   if (loading) {
     return (
       <Spinner />
@@ -129,23 +135,29 @@ export const FullBlog = () => {
             </div>
           </header>
           <div className="p-8">
-            <button
-              onClick={handleSummarize}
-              disabled={summaryLoading}
-              className="mb-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
-            >
-              {
-                summaryLoading ? (
-                  <>
-                    Summarizing...
-                  </>
+            <div className="flex space-x-4 mb-6">
+              <button
+                onClick={handleSummarize}
+                disabled={summaryLoading}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+              >
+                {summaryLoading ? (
+                  <>Summarizing...</>
                 ) : (
                   <>
                     <BookOpen className="mr-2" size={20} />
                     Summarize
                   </>
                 )}
-            </button>
+              </button>
+              <button
+                onClick={handleChatWithBlog}
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+              >
+                <MessageSquare className="mr-2" size={20} />
+                Chat with Blog
+              </button>
+            </div>
             <Summary
               summary={summary}
               loading={summaryLoading}
