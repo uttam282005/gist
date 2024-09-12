@@ -1,13 +1,12 @@
-flask==3.0.2
-flask-cors==4.0.0
-langchain==0.1.9
-langchain-groq==0.0.7
-langchain-community==0.0.24
-langchain-core==0.1.26
-langchain-text-splitters==0.0.1
-langchain-google-genai==0.0.11
-pandas==2.2.1
-sqlalchemy==2.0.27
-psycopg2-binary==2.9.9
-python-dotenv==1.0.1
-chromadb==0.4.24
+flask
+flask-cors
+langchain
+langchain-groq
+langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-google-genai
+pandas
+sqlalchemy
+psycopg2-binary  # Assuming you're using PostgreSQL
+python-dotenv  # For managing environment variables
