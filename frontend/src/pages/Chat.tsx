@@ -21,6 +21,7 @@ export default function ChatInterface() {
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [blogTitle, setBlogTitle] = useState('')
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return
@@ -45,6 +46,7 @@ export default function ChatInterface() {
         text: response.data.generated_response,
         sender: 'ai'
       }
+      setBlogTitle(response.data.blog_title);
       setMessages(prevMessages => [...prevMessages, aiMessage])
     } catch (error) {
       console.error('Error fetching AI response:', error)
@@ -71,7 +73,7 @@ export default function ChatInterface() {
     <div className="flex flex-col h-[100dvh] bg-gray-100">
       {/* Chat Header */}
       <div className="bg-white p-3 shadow">
-        <h1 className="text-lg font-semibold">Chat with Blog</h1>
+        <h1 className="text-lg font-semibold">Chat with {blogTitle}</h1>
       </div>
 
       {/* Messages */}
