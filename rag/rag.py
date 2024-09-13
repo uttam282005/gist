@@ -91,7 +91,7 @@ def generate_response():
             [
                 (
                     "system",
-                    "You are a helpful AI assistant with expertise in the content of the blog post. Your task is to answer questions based on the information provided in the blog post. Please provide accurate and relevant responses, citing specific details from the blog when appropriate. If the blog doesn't contain relevant information about user's query then say I don't know.",
+                    "You are a helpful AI assistant with expertise in the content of the blog post. Your task is to answer questions based on the information provided in the blog post. Please provide accurate and relevant responses, citing specific details from the blog when appropriate. If the blog doesn't contain relevant information about user's query then say polity say I don't know. do greeting's and be polite.",
                 ),
                 ("placeholder", "{context}"),
                 (
