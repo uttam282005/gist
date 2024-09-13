@@ -11,11 +11,12 @@ Welcome to our blogging website! This project is a fully-featured blogging platf
 - **Database:** [PostgreSQL](https://www.postgresql.org/) - A powerful, open-source object-relational database system
 - **Deployment:**
   - [Cloudflare](https://www.cloudflare.com/) - For edge computing and content delivery
-  - [Vercel](https://vercel.com/) - For frontend deployment and serverless functions
+  - [Cloudflare pages](https://www.cloudflare.com/) - For frontend deployment
 
 ## Features
 
 - **Markdown Support:** Write your blog posts in Markdown for easy formatting and readability.
 - **Syntax Highlighting for Code:** Showcase your code snippets with beautiful syntax highlighting.
 - **AI-Powered Blog Summarization:** Get a quick gist of full blog posts using AI technology.
-- **More to come...** Stay tuned for additional exciting features!
+- **Chat with Blog (RAG-based AI System)**: Communicate with an AI system that pulls information from blog posts and provides insightful responses.
+- **User Profile**: Users can edit their profiles, update information, and manage blog posts.
