@@ -10,3 +10,4 @@ pandas
 sqlalchemy
 psycopg2-binary  # Assuming you're using PostgreSQL
 python-dotenv  # For managing environment variables
+gunicorn 

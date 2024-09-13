@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Preview } from './Preview'
+import { RAG_URL } from '@/config'
 
 type Message = {
   id: number
@@ -34,7 +35,7 @@ export default function ChatInterface() {
     setIsLoading(true)
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/generate', {
+      const response = await axios.post(`${RAG_URL}/generate`, {
         blog_id,
         query: inputValue
       })
