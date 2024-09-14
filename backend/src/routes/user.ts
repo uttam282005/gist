@@ -31,7 +31,8 @@ user.post("/signup", async (c) => {
     });
     if (!success)
       return c.json({
-        message: "Invalid inputs (passowrd must contain atleast 6 characters and Email should be of valid format!)",
+        message:
+          "Invalid inputs (passowrd must contain atleast 6 characters and Email should be of valid format!)",
         success: false,
       });
     const emailAlreadyExist = await prisma.user.findUnique({
@@ -130,10 +131,11 @@ user.get("/blog", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const userId = c.get("userId");
-    if (!userId) return c.json({
-      user: null,
-      success: false
-    })
+    if (!userId)
+      return c.json({
+        user: null,
+        success: false,
+      });
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -141,8 +143,8 @@ user.get("/blog", async (c) => {
       select: {
         post: true,
         username: true,
-        id: true
-      }
+        id: true,
+      },
     });
     return c.json({
       user,
@@ -153,38 +155,38 @@ user.get("/blog", async (c) => {
     return c.status(403);
   }
 });
-user.get('/:id', async (c) => {
+user.get("/:id", async (c) => {
   try {
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
-    const userId = c.req.param('id');
-    const userDetails = await prisma.post.findMany({
+    const userId = c.req.param("id");
+    const userDetails = await prisma.user.findUnique({
       where: {
-        authorId: userId,
-      }, select: {
-        createdAt: true,
-        title: true,
+        id: userId,
+      },
+      select: {
         id: true,
-        content: true,
-        author: {
+        username: true,
+        post: {
           select: {
-            username: true,
+            title: true,
+            authorId: true,
+            content: true,
+            createdAt: true,
             id: true,
-            email: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
     return c.json({
       userDetails,
       success: true,
-    })
+    });
   } catch (error) {
     console.error(error);
     return c.status(403);
   }
-
-})
+});
 
 export default user;

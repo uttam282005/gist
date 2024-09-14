@@ -14,9 +14,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 
+# boilerplate using ai
 app = Flask(__name__)
 CORS(app)  # Add this line to enable CORS for all routes
-
 # Set up your Google API key
 os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY") or ""
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY") or ""
@@ -45,12 +45,18 @@ def fetch_blog_by_id(blog_id):
 
 
 def process_blog(df):
+    # loading blog content from the retirieved datafrome
     loader = DataFrameLoader(df, page_content_column="content")
     data = loader.load()
+    # setting up the model for generating embeddings (jo mil jaye)
     embedding = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    # chunking the data for better retrival
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    # chunking the data for better retrival
     chunks = text_splitter.split_documents(data)
+    # using chrome db for similarity search (using cosine similarity)
     vectorstore = Chroma.from_documents(documents=chunks, embedding=embedding)
+    # retriver
     retriever = vectorstore.as_retriever(
         search_type="similarity", search_kwargs={"k": 2}
     )
@@ -87,6 +93,9 @@ def generate_response():
 
         llm = ChatGroq(model="llama-3.1-8b-instant")
 
+        # RetrivalOA chain was unnecessary headache
+        # writing custom prompt template
+
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -108,6 +117,7 @@ def generate_response():
 
         rag_chain = prompt | llm
 
+        # context needs to be a list of base messages (a simple api request to the model with retirieved blog content  would have been better)
         result = rag_chain.invoke(
             {
                 "context": [SystemMessage(context)],
