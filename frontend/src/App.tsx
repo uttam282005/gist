@@ -18,7 +18,6 @@ function App() {
         <Routes>
           {/* Wrap all authenticated routes with the Layout component */}
           <Route element={<Layout />}>
-            <Route path="/" element={<Landing />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:id" element={<FullBlog />} />
             <Route path="/publish" element={<Publish />} />
@@ -30,6 +29,7 @@ function App() {
           </Route>
 
           {/* Unauthenticated routes */}
+          <Route path="/" element={<Landing />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
         </Routes>
