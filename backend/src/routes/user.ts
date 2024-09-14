@@ -130,6 +130,10 @@ user.get("/blog", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const userId = c.get("userId");
+    if (!userId) return c.json({
+      user: null,
+      success: false
+    })
     const user = await prisma.user.findUnique({
       where: {
         id: userId,

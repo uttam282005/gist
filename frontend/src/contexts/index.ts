@@ -6,10 +6,12 @@ export interface UserDetails {
   post: [];
 }
 
-export const CurrentSessionContext = createContext<UserDetails | undefined>({
+export const CurrentSessionContext = createContext<UserDetails | null>({
   username: "",
   id: "",
-  post: []
+  post: [],
 });
+
+export const IsSignedInContext = createContext<boolean>(false);
 
 

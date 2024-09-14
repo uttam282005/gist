@@ -1,54 +1,56 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BACKEND_URL } from "../config";
-import { UseGetUserProfile } from "../hooks";
 import { BlogCard } from "./BlogCard";
 import { UserPosts } from "../hooks";
 import { Appbar } from "./Appbar";
 import { Pencil, User, Trash2 } from "lucide-react";
 import { useContext, useState, useEffect } from "react";
-import { CurrentSessionContext } from "../contexts";
+import { CurrentSessionContext, IsSignedInContext } from "../contexts";
 import { Spinner } from "./Spinner";
+import { Error } from "./Error";
 
 export const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [deletingPosts, setDeletingPosts] = useState<Set<string>>(new Set());
-  const { id = "" } = useParams();
-  const userPosts: UserPosts[] | undefined = UseGetUserProfile(id);
   const navigate = useNavigate();
-  const currentSession = useContext(CurrentSessionContext);
-  const currentUserId = currentSession?.id;
+  const currentUser = useContext(CurrentSessionContext);
+  const userId = useParams().id;
+  const isSignedIn = useContext(IsSignedInContext);
+  const [deletingPosts, setDeletingPosts] = useState<Set<string>>(new Set());
+  const userPosts: UserPosts[] | undefined = currentUser?.post;
+  const currentUserId = currentUser?.id;
+
   const handleEdit = (postId: string) => {
-    navigate(`/update/${postId}`)
+    navigate(`/update/${postId}`);
   };
 
   const handleDelete = (postId: string) => {
-    setDeletingPosts(prev => new Set(prev).add(postId));
+    setDeletingPosts((prev) => new Set(prev).add(postId));
     fetch(`${BACKEND_URL}/api/v1/blog/${postId}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
-    .then(response => {
-      if (response.ok) {
-        window.location.reload();
-      } else {
-        console.error('Failed to delete the post');
-        setDeletingPosts(prev => {
+      .then((response) => {
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          console.error("Failed to delete the post");
+          setDeletingPosts((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(postId);
+            return newSet;
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+        setDeletingPosts((prev) => {
           const newSet = new Set(prev);
           newSet.delete(postId);
           return newSet;
         });
-      }
-    })
-    .catch(error => {
-      console.error('Error deleting post:', error);
-      setDeletingPosts(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(postId);
-        return newSet;
       });
-    });
   };
 
   useEffect(() => {
@@ -57,10 +59,18 @@ export const Profile = () => {
     }
   }, [userPosts]);
 
-  if (isLoading) {
+  if (!userId || !isSignedIn)
     return (
-        <Spinner />
+      <div className="flex justify-self-center pt-20">
+        <Error
+          message={"Please log in first"}
+          onClose={() => (window.location.href = "/signin")}
+        />
+      </div>
     );
+
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
@@ -71,8 +81,12 @@ export const Profile = () => {
           <div className="flex items-center space-x-4">
             <User size={64} className="text-gray-400" />
             <div>
-              <h1 className="text-2xl font-bold">{userPosts?.[0]?.author.username || "User Profile"}</h1>
-              <p className="text-gray-600">Total Posts: {userPosts?.length || 0}</p>
+              <h1 className="text-2xl font-bold">
+                {currentUser?.username || "User Profile"}
+              </h1>
+              <p className="text-gray-600">
+                Total Posts: {userPosts?.length || 0}
+              </p>
             </div>
           </div>
         </div>
@@ -83,17 +97,20 @@ export const Profile = () => {
             </div>
           ) : (
             userPosts?.map((userPost) => (
-              <div key={userPost.id} className="bg-white rounded-lg shadow-md p-6">
+              <div
+                key={userPost.id}
+                className="bg-white rounded-lg shadow-md p-6"
+              >
                 <div className="flex justify-between items-start mb-4">
                   <BlogCard
                     title={userPost.title}
-                    authorId={id}
+                    authorId={userId}
                     content={userPost.content}
                     createdAt={userPost.createdAt}
-                    authorName={userPost.author.username}
+                    authorName={currentUser!.username}
                     id={userPost.id}
                   />
-                  {currentUserId === userPost.author.id && (
+                  {currentUserId === currentUser!.id && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(userPost.id)}
@@ -108,7 +125,9 @@ export const Profile = () => {
                         className="flex items-center gap-2 py-2 px-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors disabled:bg-gray-400"
                       >
                         <Trash2 size={16} />
-                        {deletingPosts.has(userPost.id) ? 'Deleting...' : 'Delete'}
+                        {deletingPosts.has(userPost.id)
+                          ? "Deleting..."
+                          : "Delete"}
                       </button>
                     </div>
                   )}

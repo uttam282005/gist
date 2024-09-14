@@ -63,7 +63,7 @@ export const Blogs = () => {
       <div className="min-h-screen flex flex-col">
         <Appbar />
         <div className="flex-grow flex justify-center items-center">
-          < Error message={errorMessage} />
+          < Error message={errorMessage} onClose={() => window.location.href = '/signin'}/>
         </div >
       </div >
       :

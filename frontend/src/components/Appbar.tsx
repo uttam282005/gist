@@ -1,34 +1,41 @@
-import { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sparkles } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CurrentSessionContext } from '../contexts'
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CurrentSessionContext, IsSignedInContext } from "../contexts";
 
 export interface NavLink {
-  name: string
-  href: string
+  name: string;
+  href: string;
 }
 
 const defaultNavLinks: NavLink[] = [
-  { name: 'Home', href: '/' },
-  { name: 'Blogs', href: '/blogs' },
-  { name: 'About', href: '/about' },
-  { name: 'Create', href: '/publish' },
-]
+  { name: "Home", href: "/" },
+  { name: "Blogs", href: "/blogs" },
+  { name: "About", href: "/about" },
+  { name: "Create", href: "/publish" },
+];
 
-export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navLinks?: NavLink[], showAvatar?: boolean }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const currentUser = useContext(CurrentSessionContext)
-  const userId = currentUser?.id
-  const username = currentUser?.username
+export const Appbar = ({
+  navLinks = defaultNavLinks,
+  showAvatar = true,
+}: {
+  navLinks?: NavLink[];
+  showAvatar?: boolean;
+}) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isSignedIn = useContext(IsSignedInContext);
+  const currentUser = useContext(CurrentSessionContext);
+  const userId = currentUser?.id;
+  const username = currentUser?.username;
 
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b border-border/40 shadow-md">
@@ -54,27 +61,42 @@ export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navL
             {showAvatar && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="relative h-8 w-8 rounded-full"
+                  >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={`https://avatar.vercel.sh/${userId}.png`} alt={username} />
-                      <AvatarFallback>{username?.charAt(0).toUpperCase()}</AvatarFallback>
+                      <AvatarImage
+                        src={`https://avatar.vercel.sh/${userId}.png`}
+                        alt={username}
+                      />
+                      <AvatarFallback>
+                        {username?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuItem>
-                    <Link to={`/profile/${userId}`} className="w-full">Profile</Link>
+                    <Link to={`/profile/${userId}`} className="w-full">
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Button onClick={() => {
-                      localStorage.removeItem('token');
-                      window.location.href = '/';
-                    }} className="w-full text-left">
-                      Log out
-                    </Button>
+                    {isSignedIn && (
+                      <Button
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          window.location.href = "/";
+                        }}
+                        className="w-full text-left"
+                      >
+                        Log out
+                      </Button>
+                    )}{" "}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenu>
             )}
           </div>
           <div className="flex items-center md:hidden">
@@ -128,6 +150,6 @@ export const Appbar = ({ navLinks = defaultNavLinks, showAvatar = true }: { navL
           </motion.div>
         )}
       </AnimatePresence>
-    </nav >
-  )
-}
+    </nav>
+  );
+};
