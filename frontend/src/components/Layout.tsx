@@ -45,7 +45,7 @@ function Layout() {
     getUser();
   }, [navigate]); // Re-run the effect when the navigate function changes
 
-  if (isLoading) return <Spinner/
+  if (isLoading) return <Spinner/>
   
 
   return (
