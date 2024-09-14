@@ -13,11 +13,11 @@ export const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const currentUser = useContext(CurrentSessionContext);
-  const userId = useParams().id;
+  const currentUserId = useParams().id
+  const userId = currentUser!.id;
   const isSignedIn = useContext(IsSignedInContext);
   const [deletingPosts, setDeletingPosts] = useState<Set<string>>(new Set());
   const userPosts: UserPosts[] | undefined = currentUser?.post;
-  const currentUserId = currentUser?.id;
 
   const handleEdit = (postId: string) => {
     navigate(`/update/${postId}`);
@@ -59,7 +59,7 @@ export const Profile = () => {
     }
   }, [userPosts]);
 
-  if (!userId || !isSignedIn)
+  if (!isSignedIn)
     return (
       <div className="flex justify-self-center pt-20">
         <Error
