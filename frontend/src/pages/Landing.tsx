@@ -121,7 +121,7 @@ export default function LandingPage() {
                 <Card className="h-full flex flex-col">
                   <CardHeader className="flex-grow-0">
                     <img
-                      src="/placeholder.svg?height=200&width=400"
+                      src="https://assets.skyfilabs.com/images/blog/what-is-computer-vision.webp"
                       alt="AI in Blogging"
                       className="rounded-t-lg object-cover w-full h-[200px]"
                     />
@@ -135,38 +135,42 @@ export default function LandingPage() {
                   </CardFooter>
                 </Card>
               </Link>
-              <Card className="h-full flex flex-col">
-                <CardHeader className="flex-grow-0">
-                  <img
-                    src="/placeholder.svg?height=200&width=400"
-                    alt="Markdown Tips"
-                    className="rounded-t-lg object-cover w-full h-[200px]"
-                  />
-                  <CardTitle className="mt-4 text-lg">10 Markdown Tips for Better Writing</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground text-sm line-clamp-3">Learn how to leverage Markdown to streamline your writing process and create beautifully formatted content.</p>
-                </CardContent>
-                <CardFooter className="flex-grow-0">
-                  <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                </CardFooter>
-              </Card>
-              <Card className="h-full flex flex-col">
-                <CardHeader className="flex-grow-0">
-                  <img
-                    src="/placeholder.svg?height=200&width=400"
-                    alt="Engaging Readers"
-                    className="rounded-t-lg object-cover w-full h-[200px]"
-                  />
-                  <CardTitle className="mt-4 text-lg">Engaging Readers with Interactive Content</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground text-sm line-clamp-3">Discover strategies to create interactive blog posts that keep your audience engaged and coming back for more.</p>
-                </CardContent>
-                <CardFooter className="flex-grow-0">
-                  <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                </CardFooter>
-              </Card>
+              <Link to={'/blog/9f540b5e-595f-4d27-be2a-9531a9b5cc68'}>
+                <Card className="h-full flex flex-col">
+                  <CardHeader className="flex-grow-0">
+                    <img
+                      src="https://kirkstrobeck.github.io/whatismarkdown.com/img/markdown.png"
+                      alt="Markdown Tips"
+                      className="rounded-t-lg object-cover w-full h-[200px]"
+                    />
+                    <CardTitle className="mt-4 text-lg">10 Markdown Tips for Better Writing</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-muted-foreground text-sm line-clamp-3">Learn how to leverage Markdown to streamline your writing process and create beautifully formatted content.</p>
+                  </CardContent>
+                  <CardFooter className="flex-grow-0">
+                    <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                  </CardFooter>
+                </Card>
+              </Link>
+              <Link to={'/blog/ebff04ea-c3b1-4455-bc88-bb6875c585d9'}>
+                <Card className="h-full flex flex-col">
+                  <CardHeader className="flex-grow-0">
+                    <img
+                      src="https://images.inc.com/uploaded_files/image/1920x1080/getty_508586144_200013332000928073_324949.jpg"
+                      alt="Engaging Readers"
+                      className="rounded-t-lg object-cover w-full h-[200px]"
+                    />
+                    <CardTitle className="mt-4 text-lg">Engaging Readers with Interactive Content</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-muted-foreground text-sm line-clamp-3">Discover strategies to create interactive blog posts that keep your audience engaged and coming back for more.</p>
+                  </CardContent>
+                  <CardFooter className="flex-grow-0">
+                    <Button variant="ghost" className="w-full justify-start">Read More <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                  </CardFooter>
+                </Card>
+              </Link>
             </div>
           </div>
         </section>
@@ -240,6 +244,6 @@ export default function LandingPage() {
           </Link>
         </nav>
       </footer>
-    </div>
+    </div >
   );
 }
