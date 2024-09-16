@@ -245,7 +245,7 @@ blog.delete('/:id', async (c) => {
   }
 });
 
-// blog.get('/vectorize/:id', async (c) => {
+// blog.get( '/vectorize/:id', async (c) => {
 //   try {
 //     const blogId = c.req.param('id');
 //     const prisma = new PrismaClient({

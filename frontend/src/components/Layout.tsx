@@ -22,6 +22,8 @@ function Layout() {
           },
         });
 
+        console.log(response.data)
+
         if (response.data.success) {
           setIsSignedIn(true);
           setSessionData(response.data.user);
@@ -45,15 +47,15 @@ function Layout() {
     getUser();
   }, [navigate]); // Re-run the effect when the navigate function changes
 
-  if (isLoading) return <Spinner/>
-  
+  if (isLoading) return <Spinner />
+
 
   return (
     <CurrentSessionContext.Provider value={sessionData}>
       <IsSignedInContext.Provider value={isSignedIn}>
         {/* This is where the child components will be rendered */}
         <div className="main-content">
-          <Outlet /> 
+          <Outlet />
         </div>
 
         {/* Add a footer if needed */}
