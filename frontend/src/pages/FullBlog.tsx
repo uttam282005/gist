@@ -1,24 +1,25 @@
-import { useEffect, useState } from "react"
-import { BACKEND_URL } from "../config"
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, SetURLSearchParams } from 'react-router-dom';
+import axios from "axios";
+import { BACKEND_URL } from "../config";
 import { Appbar } from "../components/Appbar";
 import { Error } from "../components/Error";
-import { Spinner } from "../components/Spinner";
-import { useParams } from "react-router-dom";
-import axios from "axios";
 import { ShowMDX } from "../components/ShowMDX";
 import { BookOpen, Clock, User, MessageSquare } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface SummaryParams {
+type SummaryProps = {
   summary: string,
   loading: boolean,
   error: boolean,
-  errorMessage: string,
+  errorMessage: string
 }
 
-const Summary = ({ summary, loading, error, errorMessage }: SummaryParams) => {
+const Summary = ({ summary, loading, error, errorMessage }: SummaryProps) => {
   if (loading) {
-    return null
+    return <Skeleton className="w-full h-24 mt-6" />;
   }
   if (error) {
     return <Error message={errorMessage} />;
@@ -27,33 +28,40 @@ const Summary = ({ summary, loading, error, errorMessage }: SummaryParams) => {
     return null;
   }
   return (
-    <div className="mt-6 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 flex items-center">
-        <BookOpen className="mr-2" size={24} />
-        Summary
-      </h2>
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed px-4">{summary}</p>
-    </div>
+    <Card className="mt-6">
+      <CardHeader>
+        <h2 className="text-2xl font-bold flex items-center">
+          <BookOpen className="mr-2" size={24} />
+          Summary
+        </h2>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">{summary}</p>
+      </CardContent>
+    </Card>
   );
 };
 
 export const FullBlog = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [createdAt, setCreatedAt] = useState('');
-  const [summaryError, setSummaryError] = useState(false);
-  const [summaryErrorMessage, setSummaryErrorMessage] = useState('');
-  const [summaryLoading, setSummaryLoading] = useState(false);
-  const [content, setContent] = useState('');
+  const [blogData, setBlogData] = useState({
+    title: '',
+    author: '',
+    createdAt: '',
+    content: '',
+  });
+  const [summaryState, setSummaryState] = useState({
+    summary: '',
+    loading: false,
+    error: false,
+    errorMessage: '',
+  });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [summary, setSummary] = useState("");
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState({ isError: false, message: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function getBlog() {
+    const getBlog = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
           headers: {
@@ -61,46 +69,50 @@ export const FullBlog = () => {
           }
         });
         if (!res.data.success) {
-          setError(true);
-          setErrorMessage(res.data.message);
-          setLoading(false);
+          setError({ isError: true, message: res.data.message });
         } else {
-          setTitle(res.data.blog.title);
-          setContent(res.data.blog.content);
-          setAuthor(res.data.blog.author.username);
-          setCreatedAt(new Date(res.data.blog.createdAt).toLocaleDateString());
-          setLoading(false);
+          setBlogData({
+            title: res.data.blog.title,
+            content: res.data.blog.content,
+            author: res.data.blog.author.username,
+            createdAt: new Date(res.data.blog.createdAt).toLocaleDateString(),
+          });
         }
       } catch (error) {
-        setError(true);
-        setErrorMessage('Internal server error');
+        setError({ isError: true, message: 'Internal server error' });
+      } finally {
         setLoading(false);
       }
-    }
+    };
     getBlog();
   }, [id]);
 
   const handleSummarize = async () => {
     try {
-      setSummaryLoading(true);
+      setSummaryState(prev => ({ ...prev, loading: true }));
       const res = await axios.get(`${BACKEND_URL}/api/v1/blog/summarize/${id}`, {
         headers: {
           authorization: 'Bearer ' + localStorage.getItem('token')
         }
       });
       if (res.data.status) {
-        setSummary(res.data.summary);
-        setSummaryLoading(false);
+        setSummaryState(prev => ({ ...prev, summary: res.data.summary, loading: false }));
       } else {
-        setSummaryError(true);
-        setSummaryErrorMessage(res.data.message);
-        setSummaryLoading(false);
+        setSummaryState(prev => ({
+          ...prev,
+          error: true,
+          errorMessage: res.data.message,
+          loading: false
+        }));
       }
     } catch (error) {
       console.error(error);
-      setSummaryError(true);
-      setSummaryErrorMessage("Internal server error");
-      setSummaryLoading(false);
+      setSummaryState(prev => ({
+        ...prev,
+        error: true,
+        errorMessage: "Internal server error",
+        loading: false
+      }));
     }
   };
 
@@ -110,65 +122,74 @@ export const FullBlog = () => {
 
   if (loading) {
     return (
-      <Spinner />
+      <div className="container mx-auto px-4 py-8">
+        <Skeleton className="w-full h-12 mb-4" />
+        <Skeleton className="w-3/4 h-8 mb-2" />
+        <Skeleton className="w-1/2 h-6 mb-8" />
+        <Skeleton className="w-full h-64" />
+      </div>
     );
   }
 
-  if (error) {
+  if (error.isError) {
     return (
-      <Error message={errorMessage} onClose={() => window.location.href = `/`} />
+      <Error message={error.message} onClose={() => navigate('/')} />
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <Appbar />
       <main className="container mx-auto px-4 py-8">
-        <article className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
-          <header className="bg-gray-900 text-white p-8">
-            <h1 className="text-4xl font-bold mb-4">{title}</h1>
-            <div className="flex items-center text-sm text-gray-300">
-              <User size={16} className="mr-2" />
-              <span className="mr-4">{author}</span>
-              <Clock size={16} className="mr-2" />
-              <time dateTime={createdAt}>{createdAt}</time>
+        <Card className="overflow-hidden">
+          <CardHeader className="bg-primary text-primary-foreground p-8">
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4">{blogData.title}</h1>
+            <div className="flex flex-col sm:flex-row sm:items-center text-sm space-y-2 sm:space-y-0 sm:space-x-4">
+              <div className="flex items-center">
+                <User size={16} className="mr-2" />
+                <span>{blogData.author}</span>
+              </div>
+              <div className="flex items-center">
+                <Clock size={16} className="mr-2" />
+                <time dateTime={blogData.createdAt}>{blogData.createdAt}</time>
+              </div>
             </div>
-          </header>
-          <div className="p-8">
-            <div className="flex space-x-4 mb-6">
-              <button
+          </CardHeader>
+          <CardContent className="p-8">
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+              <Button
                 onClick={handleSummarize}
-                disabled={summaryLoading}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+                disabled={summaryState.loading}
+                className="w-full sm:w-auto"
               >
-                {summaryLoading ? (
-                  <>Summarizing...</>
+                {summaryState.loading ? (
+                  "Summarizing..."
                 ) : (
                   <>
                     <BookOpen className="mr-2" size={20} />
                     Summarize
                   </>
                 )}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleChatWithBlog}
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+                className="w-full sm:w-auto"
               >
                 <MessageSquare className="mr-2" size={20} />
                 Chat with Blog
-              </button>
+              </Button>
             </div>
             <Summary
-              summary={summary}
-              loading={summaryLoading}
-              error={summaryError}
-              errorMessage={summaryErrorMessage}
+              summary={summaryState.summary}
+              loading={summaryState.loading}
+              error={summaryState.error}
+              errorMessage={summaryState.errorMessage}
             />
             <div className="prose dark:prose-invert max-w-none mt-8">
-              <ShowMDX source={content} />
+              <ShowMDX source={blogData.content} />
             </div>
-          </div>
-        </article>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );

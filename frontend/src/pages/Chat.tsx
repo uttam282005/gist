@@ -72,20 +72,20 @@ export default function ChatInterface() {
   return (
     <div className="flex flex-col h-[100dvh] bg-gray-100">
       {/* Chat Header */}
-      <div className="bg-white p-3 shadow">
-        <h1 className="text-lg font-semibold">Chat with {blogTitle}</h1>
+      <div className="bg-white p-2 sm:p-3 shadow">
+        <h1 className="text-base sm:text-lg font-semibold truncate">Chat with {blogTitle}</h1>
       </div>
 
       {/* Messages */}
-      <ScrollArea className="flex-grow p-3" ref={scrollAreaRef}>
-        <div className="space-y-4">
+      <ScrollArea className="flex-grow p-2 sm:p-3" ref={scrollAreaRef}>
+        <div className="space-y-3 sm:space-y-4">
           {messages.map(message => (
             <div
               key={message.id}
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] p-3 rounded-lg ${message.sender === 'user'
+                className={`max-w-[90%] sm:max-w-[85%] p-2 sm:p-3 rounded-lg ${message.sender === 'user'
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-white text-gray-800 border'
                   }`}
@@ -96,7 +96,7 @@ export default function ChatInterface() {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="w-[85%] p-3 rounded-lg bg-gray-200 animate-pulse">
+              <div className="w-[90%] sm:w-[85%] p-2 sm:p-3 rounded-lg bg-gray-200 animate-pulse">
                 <div className="h-2 bg-gray-300 rounded w-full mb-2"></div>
                 <div className="h-2 bg-gray-300 rounded w-5/6 mb-2"></div>
                 <div className="h-2 bg-gray-300 rounded w-4/6"></div>
@@ -108,7 +108,7 @@ export default function ChatInterface() {
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="p-3 bg-white border-t">
+      <div className="p-2 sm:p-3 bg-white border-t">
         <form
           onSubmit={e => {
             e.preventDefault()
@@ -120,7 +120,7 @@ export default function ChatInterface() {
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             placeholder="Type your message..."
-            className="flex-grow"
+            className="flex-grow text-sm sm:text-base"
           />
           <Button type="submit" size="icon" className="shrink-0">
             <Send className="h-4 w-4" />
