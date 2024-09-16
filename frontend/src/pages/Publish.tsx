@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { Sparkles, Send } from 'lucide-react'
@@ -12,6 +12,7 @@ import { Preview } from "./Preview"
 import { Error } from '@/components/Error'
 import { Spinner } from '@/components/Spinner'
 import { Appbar } from '@/components/Appbar'
+import { CurrentSessionContext } from '@/contexts'
 
 export default function Publish() {
   const [title, setTitle] = useState("")
@@ -19,6 +20,7 @@ export default function Publish() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const currentUser = useContext(CurrentSessionContext)
   const navigate = useNavigate()
 
   const handlePublish = async () => {
@@ -60,7 +62,7 @@ export default function Publish() {
 
   return (
     <div>
-      <Appbar />
+      <Appbar userId={currentUser?.id} />
       <div className="container mx-auto px-4 py-2">
         <Card className="w-full max-w-4xl mx-auto">
           <CardHeader>

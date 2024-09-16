@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Appbar } from '../components/Appbar';
 import { Users, Target, BookOpen, Award } from 'lucide-react';
+import { CurrentSessionContext } from '@/contexts';
 
 const TeamMember: React.FC<{ name: string; role: string; image: string }> = ({ name, role, image }) => (
   <div className="flex flex-col items-center">
@@ -11,9 +12,10 @@ const TeamMember: React.FC<{ name: string; role: string; image: string }> = ({ n
 );
 
 const AboutPage: React.FC = () => {
+  const currentUser = useContext(CurrentSessionContext)
   return (
     <div>
-      <Appbar />
+      <Appbar userId={currentUser?.id}/>
       <div className="bg-gray-100 min-h-screen">
 
         <main className="container mx-auto px-4 py-8">

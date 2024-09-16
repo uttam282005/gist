@@ -1,11 +1,12 @@
 import { BlogCard } from "../components/BlogCard"
 import { Appbar } from "../components/Appbar"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { BACKEND_URL } from "../config"
 import { Error } from "../components/Error"
 import { indexOf } from "lodash"
 import { BlogCardSkeleton } from "../components/Skeleton"
+import { CurrentSessionContext } from "@/contexts"
 
 export interface Blog {
   "content": string;
@@ -23,6 +24,7 @@ export const Blogs = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const currentUser = useContext(CurrentSessionContext);
 
   useEffect(() => {
     try {
@@ -61,15 +63,15 @@ export const Blogs = () => {
     </div>
     : error ?
       <div className="min-h-screen flex flex-col">
-        <Appbar />
+        <Appbar userId={currentUser?.id} />
         <div className="flex-grow flex justify-center items-center">
-          < Error message={errorMessage} onClose={() => window.location.href = '/signin'}/>
+          < Error message={errorMessage} onClose={() => window.location.href = '/signin'} />
         </div >
       </div >
       :
       <div>
         <div>
-          <Appbar />
+          <Appbar userId={currentUser?.id} />
         </div>
         <div className="flex justify-center flex-col place-items-center">
           {blogs && blogs[0] ? blogs?.map((blog) => <BlogCard key={indexOf(blogs, blog)} id={blog.id} title={blog.title} content={blog.content} authorName={blog.author.username} createdAt={blog.createdAt} authorId={blog.author.id} />) : <div>No blogs found </div>}

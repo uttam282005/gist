@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CurrentSessionContext, IsSignedInContext } from "../contexts";
+import { IsSignedInContext } from "../contexts";
 
 export interface NavLink {
   name: string;
@@ -27,15 +27,16 @@ const defaultNavLinks: NavLink[] = [
 export const Appbar = ({
   navLinks = defaultNavLinks,
   showAvatar = true,
+  userId,
+  username
 }: {
   navLinks?: NavLink[];
   showAvatar?: boolean;
+  userId?: string;
+  username?: string;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isSignedIn = useContext(IsSignedInContext);
-  const currentUser = useContext(CurrentSessionContext);
-  const userId = currentUser?.id;
-  const username = currentUser?.username;
 
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b border-border/40 shadow-md">

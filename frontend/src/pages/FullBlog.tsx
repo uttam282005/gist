@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { BACKEND_URL } from "../config";
@@ -9,6 +9,7 @@ import { BookOpen, Clock, User, MessageSquare } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CurrentSessionContext } from "@/contexts";
 
 type SummaryProps = {
   summary: string,
@@ -44,6 +45,7 @@ const Summary = ({ summary, loading, error, errorMessage }: SummaryProps) => {
 
 export const FullBlog = () => {
   const { id } = useParams();
+  const currentUser = useContext(CurrentSessionContext)
   const [blogData, setBlogData] = useState({
     title: '',
     author: '',
@@ -139,7 +141,7 @@ export const FullBlog = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Appbar />
+      <Appbar userId={currentUser?.id} />
       <main className="container mx-auto px-4 py-8">
         <Card className="overflow-hidden">
           <CardHeader className="bg-primary text-primary-foreground p-8">

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from "axios"
+import { CurrentSessionContext } from '@/contexts'
 import { useNavigate, useParams } from "react-router-dom"
 import { Sparkles, Send } from 'lucide-react'
 import { Button } from "@/components/ui/button"
@@ -14,6 +15,7 @@ import { Spinner } from '@/components/Spinner'
 import { Appbar } from '@/components/Appbar'
 
 export const UpdateBlog = () => {
+  const currentUser = useContext(CurrentSessionContext);
   const { id } = useParams();
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -84,7 +86,7 @@ export const UpdateBlog = () => {
 
   return (
     <div>
-      <Appbar />
+      <Appbar username={currentUser?.username} userId={currentUser?.id} />
       <div className="container mx-auto px-4 py-2">
         <Card className="w-full max-w-4xl mx-auto">
           <CardHeader>

@@ -63,7 +63,7 @@ export const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Appbar />
+      <Appbar userId={currentUser?.id} />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-8">
           <div className="flex flex-col sm:flex-row items-center sm:space-x-4">

@@ -59,6 +59,7 @@ user.post("/signup", async (c) => {
       },
       c.env.jwtSecret
     );
+    c.set('userId', user?.id);
     return c.json({
       token,
       success: true,
@@ -94,7 +95,10 @@ user.post("/signin", async (c) => {
     const user = await prisma.user.findUnique({
       where: {
         email,
-      },
+      }, select: {
+        id: true,
+        password: true
+      }
     });
     if (!user) {
       return c.json({
@@ -114,6 +118,8 @@ user.post("/signin", async (c) => {
       email,
     };
     const token = await sign(payload, c.env.jwtSecret);
+    c.set('userId', user?.id);
+    console.log(c.get('userId'));
     return c.json({
       message: "User logged in successfully",
       success: true,
