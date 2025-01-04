@@ -5,7 +5,7 @@ import { BACKEND_URL } from "../config";
 import { Appbar } from "../components/Appbar";
 import { Error } from "../components/Error";
 import { ShowMDX } from "../components/ShowMDX";
-import { BookOpen, Clock, User, MessageSquare } from 'lucide-react';
+import { BookOpen, User, MessageSquare } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -152,8 +152,8 @@ export const FullBlog = () => {
                 <span>{blogData.author}</span>
               </div>
               <div className="flex items-center">
-                <Clock size={16} className="mr-2" />
-                <time dateTime={blogData.createdAt}>{blogData.createdAt}</time>
+                {/* <Clock size={16} className="mr-2" /> */}
+                {/* <span>{(blogData.createdAt)}</span> */}
               </div>
             </div>
           </CardHeader>
@@ -193,6 +193,6 @@ export const FullBlog = () => {
           </CardContent>
         </Card>
       </main>
-    </div>
+    </div >
   );
 };
