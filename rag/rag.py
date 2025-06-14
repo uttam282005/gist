@@ -120,7 +120,7 @@ def generate_response():
         # context needs to be a list of base messages (a simple api request to the model with retirieved blog content  would have been better)
         result = rag_chain.invoke(
             {
-                "context": [SystemMessage(context)],
+                "context": [df["content"].iloc[0]],
                 "blog_title": df["title"].iloc[0],
                 "query": query,
             }

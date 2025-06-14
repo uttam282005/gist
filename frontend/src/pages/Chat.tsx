@@ -23,6 +23,8 @@ export default function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [blogTitle, setBlogTitle] = useState('')
 
+  console.log(blog_id);
+
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return
 
