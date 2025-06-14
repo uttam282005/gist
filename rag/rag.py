@@ -129,6 +129,7 @@ def generate_response():
         return jsonify(
             {
                 "blog_title": df["title"].iloc[0],
+                "content": df["content"].iloc[0],
                 "query": query,
                 "generated_response": result.content,
                 "source_documents": [
