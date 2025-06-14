@@ -23,7 +23,6 @@ export default function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [blogTitle, setBlogTitle] = useState('')
 
-  console.log(blog_id);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return
@@ -49,6 +48,7 @@ export default function ChatInterface() {
         sender: 'ai'
       }
       setBlogTitle(response.data.blog_title);
+      console.log(response.data);
       setMessages(prevMessages => [...prevMessages, aiMessage])
     } catch (error) {
       console.error('Error fetching AI response:', error)

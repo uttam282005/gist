@@ -111,10 +111,6 @@ def generate_response():
         )
         retrived_docs = retriever.invoke(query)
 
-        context = ""
-        for docs in retrived_docs:
-            context += docs.page_content + " "
-
         rag_chain = prompt | llm
 
         # context needs to be a list of base messages (a simple api request to the model with retirieved blog content  would have been better)
