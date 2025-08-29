@@ -2,6 +2,7 @@ import { createBlogInputSchema, updateBlogInputSchema } from "@frumptious_clone/
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { Hono } from "hono";
+import { Singleton } from "../lib/prismaclient";
 import { Bindings, Variables } from "..";
 import Groq from "groq-sdk";
 
@@ -10,12 +11,10 @@ const blog = new Hono<{
   Variables: Variables
 }>()
 
-
 blog.post('/', async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const { title, content } = await c.req.json();
     const { success } = createBlogInputSchema.safeParse({
       title,
@@ -54,9 +53,8 @@ blog.post('/', async (c) => {
 
 blog.get('/:id', async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const blogId: string | undefined = c.req.param('id');
     const blog = await prisma.post.findUnique({
       where: {
@@ -88,9 +86,8 @@ blog.get('/:id', async (c) => {
 
 blog.get('/', async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const blogs = await prisma.post.findMany({
       select: {
         createdAt: true,
@@ -121,9 +118,8 @@ blog.get('/', async (c) => {
 blog.put('/', async (c) => {
   try {
     const userId = c.get('userId');
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const { updatedContent, updatedTitle, blogId } = await c.req.json();
     const blogToUpdate = await prisma.post.findUnique({
       where: {
@@ -213,9 +209,7 @@ blog.get('/summarize/:id', async (c) => {
 
 blog.delete('/:id', async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
 
     const blogId = c.req.param('id');
     const userId = c.get('userId');

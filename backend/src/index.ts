@@ -15,11 +15,14 @@ export type Bindings = {
     [key: string]: (...args: any[]) => Promise<any>
   }
 }
+
 export type Variables = Record<string, any>
 
 const app = new Hono()
 
+
 app.use(cors())
 app.route('/api/v1', api)
+
 
 export default app

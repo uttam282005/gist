@@ -21,6 +21,7 @@ export const updateBlogInputSchema = z.object({
   updatedContent: z.string(),
   blogId: z.string().uuid()
 })
+
 export type CreateBlogInput = z.infer<typeof createBlogInputSchema>;
 export type UpdateBlogInput = z.infer<typeof updateBlogInputSchema>;
 export type UserSignInInput = z.infer<typeof userSignInInputSchema>;

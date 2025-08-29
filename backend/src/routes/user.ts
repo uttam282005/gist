@@ -1,22 +1,21 @@
-import { Hono } from "hono";
-import { PrismaClient } from "@prisma/client/edge";
 import { sign } from "hono/jwt";
-import { withAccelerate } from "@prisma/extension-accelerate";
-import { Bindings, Variables } from "..";
 import {
   userSignInInputSchema,
   userSignUpInputSchema,
 } from "@frumptious_clone/common";
+import { Singleton } from "../lib/prismaclient";
+import { Hono } from "hono";
+import { Bindings, Variables } from "..";
 
-const user = new Hono<{
-  Bindings: Bindings;
-  Variables: Variables;
-}>();
+ const user= new Hono<{
+  Bindings: Bindings,
+  Variables: Variables
+}>()
+
+
 user.post("/signup", async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
 
     const { username, password, email } = await c.req.json();
     if (!username || !email || !password)
@@ -72,9 +71,8 @@ user.post("/signup", async (c) => {
 
 user.post("/signin", async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const { email, password } = await c.req.json();
 
     const { success } = userSignUpInputSchema.safeParse({
@@ -133,9 +131,8 @@ user.post("/signin", async (c) => {
 
 user.get("/blog", async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const userId = c.get("userId");
     if (!userId)
       return c.json({
@@ -163,9 +160,8 @@ user.get("/blog", async (c) => {
 });
 user.get("/:id", async (c) => {
   try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
+    const prisma = Singleton.getInstance(c.env.DATABASE_URL);
+
     const userId = c.req.param("id");
     const userDetails = await prisma.user.findUnique({
       where: {
