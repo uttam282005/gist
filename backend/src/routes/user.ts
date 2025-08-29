@@ -12,7 +12,6 @@ import { Bindings, Variables } from "..";
   Variables: Variables
 }>()
 
-
 user.post("/signup", async (c) => {
   try {
     const prisma = Singleton.getInstance(c.env.DATABASE_URL);
