@@ -74,7 +74,7 @@ export default function ChatInterface() {
   return (
     <div className="flex flex-col h-[100dvh] bg-gray-100">
       {/* Chat Header */}
-      <>FREE QUOTA EXHAUSTED, SERVICE WILL NOT WORK</>
+      <>FREE EMBEDDING MODEL QUOTA EXHAUSTED, SERVICE WILL NOT WORK</>
       <div className="bg-white p-2 sm:p-3 shadow">
         <h1 className="text-base sm:text-lg font-semibold truncate">Chat with {blogTitle}</h1>
       </div>
