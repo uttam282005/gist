@@ -194,7 +194,7 @@ blog.get('/summarize/:id', async (c) => {
             content: blog?.content || "",
           },
         ],
-        model: "llama3-70b-8192",
+        model: "llama-3.1-8b-instant",
       })
     return c.json({
       summary: completion.choices[0].message.content,
